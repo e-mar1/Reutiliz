@@ -2,26 +2,23 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-
-class User extends Authenticatable
+class Item extends Model
 {
     use HasFactory;
-    use Notifiable;
     protected $fillable = [
-        'name', 'email', 'phone', 'password', 'role', 'created_at'
+        'user_id', 'title', 'description', 'city', 'category',
+        'is_free', 'price', 'image', 'created_at'
     ];
 
     public $timestamps = false;
 
     // Relations
-    public function items()
+    public function user()
     {
-        return $this->hasMany(Item::class);
+        return $this->belongsTo(User::class);
     }
 
     public function reports()
@@ -44,3 +41,5 @@ class User extends Authenticatable
         return $this->hasMany(Command::class);
     }
 }
+
+
