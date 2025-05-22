@@ -31,5 +31,15 @@ class DatabaseSeeder extends Seeder{
 
         // Créer 10 ordres
         Order::factory(10)->create();
+
+        // Créer un utilisateur administrateur
+        $adminUser = User::create([
+            'name' => 'Admin',
+            'email' => 'admin@gmail.com',
+            'phone' => '1234567890',
+            'address' => '123 Admin St, Admin City',
+            'password' => bcrypt('12345678'),
+            'role' => 'admin',
+        ]);
     }
 }
