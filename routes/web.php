@@ -26,3 +26,9 @@ Route::get('admin/dashboard', [HomeController::class, 'index'])->name('admin.das
 Route::get('/category/{category}', [ItemController::class, 'category'])->name('category.items');
 
 Route::get('/items/create', [ItemController::class, 'create'])->name('items.create');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/user/annonces', [UserController::class, 'getUserAnnonces'])->name('user.annonces');
+    Route::get('/user/favorites', [UserController::class, 'getUserFavorites'])->name('user.favorites');
+    Route::get('/user/orders', [UserController::class, 'getUserOrders'])->name('user.orders');
+});
