@@ -35,7 +35,33 @@ class ItemController extends Controller
 
         $items = $query->orderBy('created_at', 'desc')->paginate(12); // 12 items per page
         $cities = Item::select('city')->distinct()->pluck('city');
+        $popularCategories = Item::select('category')
+            ->whereNotNull('category')
+            ->groupBy('category')
+            ->orderByRaw('COUNT(*) DESC')
+            ->limit(6)
+            ->pluck('category');
 
-        return view('welcome', compact('items', 'cities'));
+        return view('welcome', compact('items', 'cities', 'popularCategories'));
+    }
+
+    public function category($category)
+    {
+        $items = Item::where('category', $category)
+            ->orderBy('created_at', 'desc')
+            ->paginate(12);
+        $cities = Item::select('city')->distinct()->pluck('city');
+        $popularCategories = Item::select('category')
+            ->whereNotNull('category')
+            ->groupBy('category')
+            ->orderByRaw('COUNT(*) DESC')
+            ->limit(6)
+            ->pluck('category');
+        return view('welcome', [
+            'items' => $items,
+            'cities' => $cities,
+            'popularCategories' => $popularCategories,
+            'currentCategory' => $category
+        ]);
     }
 }

@@ -66,8 +66,23 @@
         </header>
         <!-- Main Content -->
         <main class="py-8">
-            <div class="max-w-7xl mx-auto px-4">
+            <div class="container mx-auto px-4">
                 <!-- Filters Section -->
+                  <div class="max-w-7xl mx-auto px-4">
+                <!-- Catégories populaires Section -->
+                @if(isset($popularCategories) && count($popularCategories) > 0)
+                <section class="mb-6">
+                    <h2 class="text-lg font-semibold text-gray-800 mb-2 flex items-center"><i class="fas fa-fire text-orange-500 mr-2"></i>Catégories populaires</h2>
+                    <div class="flex flex-wrap gap-2">
+                        @foreach($popularCategories as $category)
+                            <a href="{{ route('category.items', $category) }}" class="inline-block bg-blue-100 text-blue-700 text-xs font-semibold rounded px-3 py-1 hover:bg-blue-200 transition">{{ $category }}</a>
+                        @endforeach
+                    </div>
+                </section>
+                @endif
+            
+            
+            
                 
 <section aria-labelledby="filter-heading" class="bg-white p-4 md:p-6 rounded-xl shadow mb-8 max-w-7xl mx-auto">
     <form action="{{ route('welcome') }}" method="GET">
@@ -100,7 +115,17 @@
         </div>
     </form>
 </section>
-
+<!-- Nouvelles annonces Section Title -->
+                <div class="flex items-center mb-4 mt-8">
+                    <h2 class="text-xl font-bold text-gray-900 flex items-center">
+                        <i class="fas fa-bolt text-yellow-400 mr-2"></i>
+                        @isset($currentCategory)
+                            Catégorie : {{ $currentCategory }}
+                        @else
+                            Nouvelles annonces
+                        @endisset
+                    </h2>
+                </div>
 
                 @if($items->count() > 0)
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
