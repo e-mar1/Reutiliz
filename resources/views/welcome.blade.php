@@ -47,6 +47,7 @@
 </nav>
 
 <!-- Mobile Menu -->
+
 <div x-show="mobileMenuOpen" @click.away="mobileMenuOpen = false" class="sm:hidden border-t border-gray-200 bg-white shadow-md rounded-b-xl">
     <div class="px-4 py-3 space-y-2">
         <a href="{{ route('login') }}" class="block px-3 py-1 rounded-md text-xs font-medium text-white bg-blue-600 hover:bg-blue-700"><i class="fas fa-plus-circle mr-1"></i>Publier</a>
@@ -64,6 +65,21 @@
 </div>
 
         </header>
+        <!-- Après la navigation et avant le contenu principal -->
+        @if (session('success'))
+            <div class="max-w-7xl mx-auto px-4 mt-4">
+                <div class="bg-green-50 border-l-4 border-green-500 p-4 rounded-md shadow-sm">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-check-circle text-green-500"></i>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm text-green-700">{{ session('success') }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
         <!-- Main Content -->
         <main class="py-8">
             <div class="max-w-7xl mx-auto px-4">
@@ -99,16 +115,23 @@
             <button type="submit" class="btn-primary-solid px-3 py-1 text-xs h-8 flex items-center justify-center md:w-auto w-full"><i class="fas fa-filter mr-1"></i>Filtrer</button>
         </div>
     </form>
-</section>
 
+</section>
 
                 @if($items->count() > 0)
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
                         @foreach($items as $item)
                             <article class="bg-white rounded-xl shadow hover:shadow-lg transition-all duration-200 flex flex-col overflow-hidden">
-                                <a href="#" class="block bg-gray-100 aspect-[4/3] overflow-hidden">
-                                    <img src="https://inmedia.ma/wp-content/uploads/2024/12/pc-gamer-asus.webp" alt="{{ $item->title }}" class="w-full h-full object-cover object-center transition-transform duration-200 hover:scale-105">
-                                </a>
+                                <a href="{{ route('items.show', $item) }}" class="block bg-gray-100 aspect-[4/3] overflow-hidden">
+                                        @if($item->image)
+                                            <img src="{{ 'storage/items/' . $item->image }}" alt="{{ $item->title }}" class="w-full h-full object-cover object-center transition-transform duration-200 hover:scale-105">
+                                        @else
+                                            <div class="w-full h-full flex items-center justify-center bg-gray-200">
+                                                <i class="fas fa-image text-gray-400 text-4xl"></i>
+                                            </div>
+                                        @endif
+                                    </a>
+
                                 <div class="p-4 flex flex-col flex-grow">
                                     <span class="inline-block bg-blue-100 text-blue-700 text-xs font-semibold rounded px-2 py-0.5 mb-2">{{ $item->category ?: 'Non classé' }}</span>
                                     <h3 class="text-base font-semibold text-gray-900 mb-1 leading-tight">

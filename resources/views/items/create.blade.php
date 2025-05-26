@@ -33,11 +33,11 @@
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
-                        
+
                         <!-- Description -->
                         <div>
                             <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
-                            <textarea name="description" id="description" rows="4" 
+                            <textarea name="description" id="description" rows="4"
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('description') border-red-500 @enderror">{{ old('description') }}</textarea>
                             @error('description')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -57,7 +57,7 @@
                         <!-- Catégorie -->
                         <div>
                             <label for="category" class="block text-sm font-medium text-gray-700">Catégorie</label>
-                            <select name="category" id="category" 
+                            <select name="category" id="category"
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('category') border-red-500 @enderror">
                                 <option value="">Sélectionnez une catégorie</option>
                                 <option value="electronics" {{ old('category') == 'electronics' ? 'selected' : '' }}>Électronique</option>

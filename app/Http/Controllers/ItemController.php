@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Item;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
 class ItemController extends Controller
@@ -36,6 +37,7 @@ class ItemController extends Controller
         $items = $query->orderBy('created_at', 'desc')->paginate(12);
         $cities = Item::select('city')->distinct()->pluck('city');
 
+
         return view('welcome', compact('items', 'cities'));
     }
 
@@ -67,28 +69,30 @@ class ItemController extends Controller
             'price' => 'required_if:is_free,0|nullable|numeric|min:0',
             'is_free' => 'boolean'
         ]);
-    
+
         try {
             // Gestion de l'image
             if ($request->hasFile('image')) {
-                $imagePath = $request->file('image')->store('items', 'public');
-                $validated['image'] = $imagePath;
+                $ext = $request->image->getClientOriginalExtension();
+                $name = Str::random(30) . time() . "." . $ext;
+                $request->image->move(public_path('storage/items'), basename($name));
+                $validated['image'] = $name; // Ajouter cette ligne pour sauvegarder le chemin dans la base de données
             }
-    
+
             // Ajout de l'ID utilisateur
             $validated['user_id'] = auth()->id();
-            
+
             // Si gratuit, prix = 0
             if ($validated['is_free']) {
                 $validated['price'] = 0;
-            }
-    
+            } 
+
             // Création de l'item
             $item = Item::create($validated);
-    
+
             return redirect()->route('welcome')
                 ->with('success', 'Votre objet a été publié avec succès!');
-    
+
         } catch (\Exception $e) {
             return back()
                 ->withInput()
