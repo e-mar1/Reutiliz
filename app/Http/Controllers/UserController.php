@@ -45,7 +45,7 @@ class UserController extends Controller
      */
     public function adminIndex(Request $request)
     {
-        $query = User::orderBy('created_at', 'desc');
+        $query = User::withCount('reports')->orderBy('created_at', 'desc');
         if ($request->filled('search')) {
             $search = $request->input('search');
             $query->where(function($q) use ($search) {

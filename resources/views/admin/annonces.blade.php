@@ -99,7 +99,7 @@
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
                                     @foreach($items as $annonce)
-                                    <tr>
+                                    <tr @if($annonce->reports_count >= 3) class="bg-red-100" @endif>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $annonce->id }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $annonce->title }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $annonce->user->name ?? '' }}</td>

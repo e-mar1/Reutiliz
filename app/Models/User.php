@@ -18,6 +18,10 @@ class User extends Authenticatable
 
     public $timestamps = false;
 
+    protected $casts = [
+        'created_at' => 'datetime',
+    ];
+
     // Relations
     public function items()
     {

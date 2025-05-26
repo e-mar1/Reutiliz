@@ -87,7 +87,7 @@
                         </h2>
                     </div>
                     <!-- Dashboard Widgets Example -->
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
                         <div class="bg-white rounded-xl shadow p-6 flex items-center gap-4">
                             <div class="bg-blue-100 text-blue-600 rounded-full p-3">
                                 <i class="fas fa-users fa-lg"></i>
@@ -115,37 +115,158 @@
                                 <div class="text-xs text-gray-500">Commandes</div>
                             </div>
                         </div>
+                        <div class="bg-white rounded-xl shadow p-6 flex items-center gap-4">
+                            <div class="bg-red-100 text-red-600 rounded-full p-3">
+                                <i class="fas fa-flag fa-lg"></i>
+                            </div>
+                            <div>
+                                <div class="text-2xl font-bold">{{ $reportsCount ?? '...' }}</div>
+                                <div class="text-xs text-gray-500">Signalements</div>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Charts Section -->
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                        <div class="bg-white rounded-xl shadow p-6">
-                            <h3 class="text-lg font-semibold mb-4 flex items-center"><i class="fas fa-users text-blue-400 mr-2"></i>Utilisateurs inscrits</h3>
-                            <canvas id="usersChart"></canvas>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                        <div class="bg-white rounded-xl shadow p-2 overflow-x-auto">
+                            <h3 class="text-sm font-semibold mb-1 flex items-center"><i class="fas fa-users text-blue-400 mr-2"></i>Utilisateurs inscrits</h3>
+                            <div style="min-width: 300px; max-width: 100%;">
+                                <canvas id="usersChart" height="120"></canvas>
+                            </div>
                         </div>
-                        <div class="bg-white rounded-xl shadow p-6">
-                            <h3 class="text-lg font-semibold mb-4 flex items-center"><i class="fas fa-bullhorn text-green-400 mr-2"></i>Annonces publiées</h3>
-                            <canvas id="itemsChart"></canvas>
+                        <div class="bg-white rounded-xl shadow p-2 overflow-x-auto">
+                            <h3 class="text-sm font-semibold mb-1 flex items-center"><i class="fas fa-flag text-red-400 mr-2"></i>Signalements</h3>
+                            <div style="min-width: 300px; max-width: 100%;">
+                                <canvas id="reportsChart" height="120"></canvas>
+                            </div>
                         </div>
-                        <div class="bg-white rounded-xl shadow p-6">
-                            <h3 class="text-lg font-semibold mb-4 flex items-center"><i class="fas fa-shopping-cart text-yellow-400 mr-2"></i>Commandes</h3>
-                            <canvas id="ordersChart"></canvas>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                        <div class="bg-white rounded-xl shadow p-2 overflow-x-auto">
+                            <h3 class="text-base font-semibold mb-2 flex items-center"><i class="fas fa-bullhorn text-green-400 mr-2"></i>Annonces publiées</h3>
+                            <div style="min-width: 350px; max-width: 100%;">
+                                <canvas id="itemsChart" height="160"></canvas>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-xl shadow p-2 overflow-x-auto">
+                            <h3 class="text-base font-semibold mb-2 flex items-center"><i class="fas fa-shopping-cart text-yellow-400 mr-2"></i>Commandes</h3>
+                            <div style="min-width: 350px; max-width: 100%;">
+                                <canvas id="ordersChart" height="160"></canvas>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Recent Activity Example -->
-                    <div class="bg-white rounded-xl shadow p-6">
-                        <h3 class="text-lg font-semibold mb-4 flex items-center"><i class="fas fa-history text-gray-400 mr-2"></i>Activité récente</h3>
-                        <ul class="divide-y divide-gray-100">
-                            @forelse($recentActivities ?? [] as $activity)
-                                <li class="py-2 flex items-center text-sm">
-                                    <span class="text-blue-600 mr-2"><i class="fas fa-circle"></i></span>
-                                    <span>{{ $activity }}</span>
-                                </li>
-                            @empty
-                                <li class="py-2 text-gray-500">Aucune activité récente.</li>
-                            @endforelse
-                        </ul>
+                    <!-- Recent Annonces Section -->
+                    <div class="bg-white rounded-xl shadow p-6 mb-6">
+                        <h3 class="text-lg font-semibold mb-4 flex items-center"><i class="fas fa-bullhorn text-green-400 mr-2"></i>Dernières annonces publiées</h3>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Titre</th>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Utilisateur</th>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    @forelse($recentAnnonces as $annonce)
+                                        <tr>
+                                            <td class="px-4 py-2 text-sm text-gray-900">{{ $annonce->title }}</td>
+                                            <td class="px-4 py-2 text-sm text-gray-900">{{ $annonce->user->name ?? '-' }}</td>
+                                            <td class="px-4 py-2 text-sm text-gray-900">{{ $annonce->created_at->format('d/m/Y H:i') }}</td>
+                                        </tr>
+                                    @empty
+                                        <tr><td colspan="3" class="px-4 py-2 text-gray-500">Aucune annonce récente.</td></tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Recent Orders Section -->
+                    <div class="bg-white rounded-xl shadow p-6 mb-6">
+                        <h3 class="text-lg font-semibold mb-4 flex items-center"><i class="fas fa-shopping-cart text-yellow-400 mr-2"></i>Dernières commandes</h3>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Commande</th>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Utilisateur</th>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Annonce</th>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    @forelse($recentOrders as $order)
+                                        <tr>
+                                            <td class="px-4 py-2 text-sm text-gray-900">#{{ $order->id }}</td>
+                                            <td class="px-4 py-2 text-sm text-gray-900">{{ $order->user->name ?? '-' }}</td>
+                                            <td class="px-4 py-2 text-sm text-gray-900">{{ $order->item->title ?? '-' }}</td>
+                                            <td class="px-4 py-2 text-sm text-gray-900">{{ $order->created_at->format('d/m/Y H:i') }}</td>
+                                        </tr>
+                                    @empty
+                                        <tr><td colspan="4" class="px-4 py-2 text-gray-500">Aucune commande récente.</td></tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Recent Users Section -->
+                    <div class="bg-white rounded-xl shadow p-6 mb-6">
+                        <h3 class="text-lg font-semibold mb-4 flex items-center"><i class="fas fa-users text-blue-400 mr-2"></i>Nouveaux utilisateurs</h3>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nom</th>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    @forelse($recentUsers as $user)
+                                        <tr>
+                                            <td class="px-4 py-2 text-sm text-gray-900">{{ $user->name }}</td>
+                                            <td class="px-4 py-2 text-sm text-gray-900">{{ $user->email }}</td>
+                                            <td class="px-4 py-2 text-sm text-gray-900">{{ $user->created_at->format('d/m/Y H:i') }}</td>
+                                        </tr>
+                                    @empty
+                                        <tr><td colspan="3" class="px-4 py-2 text-gray-500">Aucun nouvel utilisateur.</td></tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Recent Reports Section -->
+                    <div class="bg-white rounded-xl shadow p-6 mb-6">
+                        <h3 class="text-lg font-semibold mb-4 flex items-center"><i class="fas fa-flag text-red-400 mr-2"></i>Derniers signalements</h3>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Utilisateur</th>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Annonce</th>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Raison</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    @php $recentReports = \App\Models\Report::with(['user', 'item'])->orderBy('date', 'desc')->take(5)->get(); @endphp
+                                    @forelse($recentReports as $report)
+                                        <tr>
+                                            <td class="px-4 py-2 text-sm text-gray-900">{{ $report->date ? \Carbon\Carbon::parse($report->date)->format('d/m/Y H:i') : '' }}</td>
+                                            <td class="px-4 py-2 text-sm text-gray-900">{{ $report->user->name ?? '-' }}</td>
+                                            <td class="px-4 py-2 text-sm text-gray-900">{{ $report->item->title ?? '-' }}</td>
+                                            <td class="px-4 py-2 text-sm text-gray-900">{{ $report->reason }}</td>
+                                        </tr>
+                                    @empty
+                                        <tr><td colspan="4" class="px-4 py-2 text-gray-500">Aucun signalement récent.</td></tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -236,37 +357,71 @@
     const ordersByDay = @json($ordersByDay);
     const ordersByMonth = @json($ordersByMonth);
     const ordersByYear = @json($ordersByYear);
+    // Reports Chart Data
+    const reportsByDay = @json($reportsByDay);
+    const reportsByMonth = @json($reportsByMonth);
+    const reportsByYear = @json($reportsByYear);
 
-    // Chart.js config for each chart
-    function createChart(ctx, datasets, title) {
+    // Modern Chart.js config for each chart
+    function createModernChart(ctx, datasets, title, colors) {
+        // Create gradient for the main dataset
+        const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+        gradient.addColorStop(0, colors.gradientFrom);
+        gradient.addColorStop(1, colors.gradientTo);
+
+        // Show all labels (no slicing)
+        const labels = datasets[0].labels;
+
         return new Chart(ctx, {
             type: 'line',
             data: {
-                labels: datasets[0].labels,
+                labels: labels,
                 datasets: [
                     {
                         label: 'Par jour',
                         data: datasets[0].data,
-                        borderColor: '#3b82f6',
-                        backgroundColor: 'rgba(59,130,246,0.1)',
+                        borderColor: colors.line,
+                        backgroundColor: gradient,
                         fill: true,
-                        tension: 0.4,
+                        tension: 0.5,
+                        pointRadius: 5,
+                        pointBackgroundColor: colors.line,
+                        pointBorderWidth: 2,
+                        pointHoverRadius: 7,
+                        borderWidth: 3,
+                        segment: {
+                            borderCapStyle: 'round',
+                        },
+                        shadowOffsetX: 0,
+                        shadowOffsetY: 4,
+                        shadowBlur: 10,
+                        shadowColor: colors.shadow,
                     },
                     {
                         label: 'Par mois',
                         data: datasets[1].data,
-                        borderColor: '#10b981',
-                        backgroundColor: 'rgba(16,185,129,0.1)',
+                        borderColor: colors.month,
+                        backgroundColor: 'rgba(0,0,0,0)',
                         fill: false,
-                        tension: 0.4,
+                        tension: 0.5,
+                        pointRadius: 4,
+                        borderWidth: 2,
+                        segment: {
+                            borderCapStyle: 'round',
+                        },
                     },
                     {
                         label: 'Par année',
                         data: datasets[2].data,
-                        borderColor: '#f59e42',
-                        backgroundColor: 'rgba(245,158,66,0.1)',
+                        borderColor: colors.year,
+                        backgroundColor: 'rgba(0,0,0,0)',
                         fill: false,
-                        tension: 0.4,
+                        tension: 0.5,
+                        pointRadius: 4,
+                        borderWidth: 2,
+                        segment: {
+                            borderCapStyle: 'round',
+                        },
                     }
                 ]
             },
@@ -278,19 +433,76 @@
                         text: title
                     },
                     legend: {
-                        display: true
+                        display: true,
+                        labels: {
+                            color: '#222',
+                            font: { size: 13, weight: 'bold' },
+                            usePointStyle: true,
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: '#fff',
+                        titleColor: '#222',
+                        bodyColor: '#222',
+                        borderColor: colors.line,
+                        borderWidth: 1,
+                        padding: 12,
+                        cornerRadius: 8,
+                        displayColors: false,
                     }
+                },
+                layout: {
+                    padding: 16
                 },
                 scales: {
                     x: {
                         display: true,
-                        title: { display: false }
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            color: '#888',
+                            font: { size: 12 }
+                        }
                     },
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        grid: {
+                            color: '#f3f4f6',
+                            borderDash: [4, 4]
+                        },
+                        ticks: {
+                            color: '#888',
+                            font: { size: 12 }
+                        }
                     }
+                },
+                animation: {
+                    duration: 1200,
+                    easing: 'easeOutQuart'
                 }
-            }
+            },
+            plugins: [{
+                // Drop shadow plugin for main line
+                beforeDraw: chart => {
+                    const ctx = chart.ctx;
+                    ctx.save();
+                    chart.data.datasets.forEach((dataset, i) => {
+                        if (i === 0) {
+                            ctx.shadowColor = colors.shadow;
+                            ctx.shadowBlur = 10;
+                            ctx.shadowOffsetY = 4;
+                        } else {
+                            ctx.shadowColor = 'rgba(0,0,0,0)';
+                            ctx.shadowBlur = 0;
+                            ctx.shadowOffsetY = 0;
+                        }
+                    });
+                },
+                afterDraw: chart => {
+                    chart.ctx.restore();
+                }
+            }]
         });
     }
 
@@ -304,9 +516,61 @@
     const ordersDay = prepareChartData(ordersByDay, 'date', 'count');
     const ordersMonth = prepareChartData(ordersByMonth, 'month', 'count');
     const ordersYear = prepareChartData(ordersByYear, 'year', 'count');
+    const reportsDay = prepareChartData(reportsByDay, 'date', 'count');
+    const reportsMonth = prepareChartData(reportsByMonth, 'month', 'count');
+    const reportsYear = prepareChartData(reportsByYear, 'year', 'count');
 
-    // Render charts
-    createChart(document.getElementById('usersChart').getContext('2d'), [usersDay, usersMonth, usersYear], 'Utilisateurs inscrits');
-    createChart(document.getElementById('itemsChart').getContext('2d'), [itemsDay, itemsMonth, itemsYear], 'Annonces publiées');
-    createChart(document.getElementById('ordersChart').getContext('2d'), [ordersDay, ordersMonth, ordersYear], 'Commandes');
+    // Render modern charts
+    createModernChart(
+        document.getElementById('usersChart').getContext('2d'),
+        [usersDay, usersMonth, usersYear],
+        'Utilisateurs inscrits',
+        {
+            line: '#3b82f6',
+            gradientFrom: 'rgba(59,130,246,0.3)',
+            gradientTo: 'rgba(59,130,246,0.05)',
+            month: '#10b981',
+            year: '#f59e42',
+            shadow: 'rgba(59,130,246,0.15)'
+        }
+    );
+    createModernChart(
+        document.getElementById('itemsChart').getContext('2d'),
+        [itemsDay, itemsMonth, itemsYear],
+        'Annonces publiées',
+        {
+            line: '#10b981',
+            gradientFrom: 'rgba(16,185,129,0.3)',
+            gradientTo: 'rgba(16,185,129,0.05)',
+            month: '#3b82f6',
+            year: '#f59e42',
+            shadow: 'rgba(16,185,129,0.15)'
+        }
+    );
+    createModernChart(
+        document.getElementById('ordersChart').getContext('2d'),
+        [ordersDay, ordersMonth, ordersYear],
+        'Commandes',
+        {
+            line: '#f59e42',
+            gradientFrom: 'rgba(245,158,66,0.3)',
+            gradientTo: 'rgba(245,158,66,0.05)',
+            month: '#3b82f6',
+            year: '#10b981',
+            shadow: 'rgba(245,158,66,0.15)'
+        }
+    );
+    createModernChart(
+        document.getElementById('reportsChart').getContext('2d'),
+        [reportsDay, reportsMonth, reportsYear],
+        'Signalements',
+        {
+            line: '#ef4444',
+            gradientFrom: 'rgba(239,68,68,0.3)',
+            gradientTo: 'rgba(239,68,68,0.05)',
+            month: '#3b82f6',
+            year: '#10b981',
+            shadow: 'rgba(239,68,68,0.15)'
+        }
+    );
 </script>

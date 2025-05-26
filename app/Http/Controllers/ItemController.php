@@ -71,7 +71,7 @@ class ItemController extends Controller
      */
     public function adminIndex(Request $request)
     {
-        $query = Item::with('user')->orderBy('created_at', 'desc');
+        $query = Item::with(['user.reports'])->withCount('reports');
         if ($request->filled('search')) {
             $search = $request->input('search');
             $query->where(function($q) use ($search) {
@@ -81,7 +81,7 @@ class ItemController extends Controller
                   });
             });
         }
-        $items = $query->paginate(20)->appends($request->only('search'));
+        $items = $query->orderBy('created_at', 'desc')->paginate(20)->appends($request->only('search'));
         return view('admin.annonces', compact('items'));
     }
 
