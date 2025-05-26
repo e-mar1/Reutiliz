@@ -15,6 +15,10 @@ class Item extends Model
 
     public $timestamps = false;
 
+    protected $casts = [
+        'created_at' => 'datetime',
+    ];
+
     // Relations
     public function user()
     {
