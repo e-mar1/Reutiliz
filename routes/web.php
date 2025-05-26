@@ -32,3 +32,23 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/user/favorites', [UserController::class, 'getUserFavorites'])->name('user.favorites');
     Route::get('/user/orders', [UserController::class, 'getUserOrders'])->name('user.orders');
 });
+
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    // Users CRUD
+    Route::get('users', [UserController::class, 'adminIndex'])->name('users.index');
+    Route::get('users/create', [UserController::class, 'create'])->name('users.create');
+    Route::post('users', [UserController::class, 'store'])->name('users.store');
+    Route::get('users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
+    Route::put('users/{user}', [UserController::class, 'update'])->name('users.update');
+    Route::delete('users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+    Route::get('users/{user}', [UserController::class, 'show'])->name('users.show');
+
+    // Annonces (Items) CRUD
+    Route::get('annonces', [ItemController::class, 'adminIndex'])->name('annonces.index');
+    Route::get('annonces/create', [ItemController::class, 'create'])->name('annonces.create');
+    Route::post('annonces', [ItemController::class, 'store'])->name('annonces.store');
+    Route::get('annonces/{item}/edit', [ItemController::class, 'edit'])->name('annonces.edit');
+    Route::put('annonces/{item}', [ItemController::class, 'update'])->name('annonces.update');
+    Route::delete('annonces/{item}', [ItemController::class, 'destroy'])->name('annonces.destroy');
+    Route::get('annonces/{item}', [ItemController::class, 'show'])->name('annonces.show');
+});

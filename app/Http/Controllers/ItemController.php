@@ -64,4 +64,90 @@ class ItemController extends Controller
             'currentCategory' => $category
         ]);
     }
+
+    /**
+     * Display a listing of the items for admin.
+     */
+    public function adminIndex(Request $request)
+    {
+        $query = Item::with('user')->orderBy('created_at', 'desc');
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function($q) use ($search) {
+                $q->where('title', 'like', "%$search%")
+                  ->orWhereHas('user', function($uq) use ($search) {
+                      $uq->where('name', 'like', "%$search%");
+                  });
+            });
+        }
+        $items = $query->paginate(20)->appends($request->only('search'));
+        return view('admin.annonces', compact('items'));
+    }
+
+    /**
+     * Show the form for creating a new item (annonce).
+     */
+    public function create()
+    {
+        return view('admin.annonces-create');
+    }
+
+    /**
+     * Store a newly created item in storage.
+     */
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'price' => 'required|numeric',
+            'city' => 'required|string|max:255',
+            'category' => 'nullable|string|max:255',
+            // Add other fields as needed
+        ]);
+        Item::create($validated);
+        return redirect()->route('admin.annonces.index')->with('success', 'Annonce créée avec succès.');
+    }
+
+    /**
+     * Show the form for editing the specified item.
+     */
+    public function edit(Item $item)
+    {
+        return view('admin.annonces-edit', compact('item'));
+    }
+
+    /**
+     * Update the specified item in storage.
+     */
+    public function update(Request $request, Item $item)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'price' => 'required|numeric',
+            'city' => 'required|string|max:255',
+            'category' => 'nullable|string|max:255',
+            // Add other fields as needed
+        ]);
+        $item->update($validated);
+        return redirect()->route('admin.annonces.index')->with('success', 'Annonce mise à jour avec succès.');
+    }
+
+    /**
+     * Remove the specified item from storage.
+     */
+    public function destroy(Item $item)
+    {
+        $item->delete();
+        return redirect()->route('admin.annonces.index')->with('success', 'Annonce supprimée avec succès.');
+    }
+
+    /**
+     * Display the specified item.
+     */
+    public function show(Item $item)
+    {
+        return view('admin.annonces-show', compact('item'));
+    }
 }

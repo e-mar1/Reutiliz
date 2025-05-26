@@ -36,10 +36,10 @@
                 <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2 px-4 py-2 text-xs text-gray-700 hover:bg-blue-50">
                     <i class="fas fa-tachometer-alt"></i> Tableau de bord
                 </a>
-                <a href="" class="flex items-center gap-2 px-4 py-2 text-xs text-gray-700 hover:bg-blue-50">
+                <a href="{{ route('admin.annonces.index') }}" class="flex items-center gap-2 px-4 py-2 text-xs text-gray-700 hover:bg-blue-50">
                     <i class="fas fa-bullhorn"></i> Annonces 
                 </a>
-                 <a href="" class="flex items-center gap-2 px-4 py-2 text-xs text-gray-700 hover:bg-blue-50">
+                 <a href="{{ route('admin.users.index') }}" class="flex items-center gap-2 px-4 py-2 text-xs text-gray-700 hover:bg-blue-50">
                     <i class="fas fa-user"></i> Utilisateurs
                 </a>
                 <a href="{{ route('profile.edit') }}" class="flex items-center gap-2 px-4 py-2 text-xs text-gray-700 hover:bg-blue-50">
