@@ -52,3 +52,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::delete('annonces/{item}', [ItemController::class, 'destroy'])->name('annonces.destroy');
     Route::get('annonces/{item}', [ItemController::class, 'show'])->name('annonces.show');
 });
+
+Route::get('/items/{item}', [ItemController::class, 'show'])->name('items.show');
+Route::post('/items/{item}/report', [ItemController::class, 'report'])->name('items.report');

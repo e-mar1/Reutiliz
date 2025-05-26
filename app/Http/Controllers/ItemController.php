@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Item;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Report;
+use Illuminate\Support\Facades\Auth;
 
 class ItemController extends Controller
 {
@@ -207,6 +209,32 @@ class ItemController extends Controller
      */
     public function show(Item $item)
     {
-        return view('admin.annonces-show', compact('item'));
+        // Only allow guests and non-admin users
+        if (auth()->check() && auth()->user()->role === 'admin') {
+            return redirect()->route('admin.dashboard');
+        }
+        // Get related items (same category, exclude current)
+        $relatedItems = \App\Models\Item::where('category', $item->category)
+            ->where('id', '!=', $item->id)
+            ->limit(4)
+            ->get();
+        return view('item-show', compact('item', 'relatedItems'));
+    }
+
+    /**
+     * Report an item (signalement).
+     */
+    public function report(Request $request, Item $item)
+    {
+        // You can expand this to accept a reason from the form if needed
+        $reason = 'Signalement utilisateur';
+        $userId = Auth::id();
+        Report::create([
+            'user_id' => $userId,
+            'item_id' => $item->id,
+            'reason' => $reason,
+            'date' => now(),
+        ]);
+        return back()->with('success', 'Merci, votre signalement a été pris en compte.');
     }
 }
