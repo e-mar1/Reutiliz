@@ -22,9 +22,9 @@
                     <i class="fas fa-recycle"></i>
                     <span>Reutiliz</span>
                 </a>
-                
+
 <nav class="flex items-center space-x-2">
-    <a href="{{ route('login') }}" class="hidden sm:inline-flex items-center px-3 py-1 rounded-md text-xs font-medium text-white bg-blue-600 hover:bg-blue-700 transition"><i class="fas fa-plus-circle mr-1"></i>Publier</a>
+    <a href="{{ route('items.create') }}" class="hidden sm:inline-flex items-center px-3 py-1 rounded-md text-xs font-medium text-white bg-blue-600 hover:bg-blue-700 transition"><i class="fas fa-plus-circle mr-1"></i>Publier</a>
     @auth
         <div x-data="{ open: false }" class="relative">
             <button @click="open = !open" class="flex items-center space-x-2 px-2 py-1 rounded text-xs text-gray-700 hover:text-blue-600 focus:outline-none">
@@ -68,7 +68,7 @@
         <main class="py-8">
             <div class="max-w-7xl mx-auto px-4">
                 <!-- Filters Section -->
-                
+
 <section aria-labelledby="filter-heading" class="bg-white p-4 md:p-6 rounded-xl shadow mb-8 max-w-7xl mx-auto">
     <form action="{{ route('welcome') }}" method="GET">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
@@ -129,7 +129,7 @@
                     </div>
                     <!-- Pagination -->
                     <nav aria-label="Pagination" class="mt-8 flex items-center justify-center">
-                        {{ $items->appends(request()->query())->links('vendor.pagination.tailwind') }} 
+                        {{ $items->appends(request()->query())->links('vendor.pagination.tailwind') }}
                     </nav>
                 @else
                     <div class="text-center py-16 bg-white rounded-xl shadow">
@@ -144,7 +144,7 @@
             </div>
         </main>
         <!-- Footer -->
-        
+
 <footer class="bg-gray-900 text-gray-300 mt-10">
     <div class="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col md:flex-row md:justify-between md:items-start gap-8">

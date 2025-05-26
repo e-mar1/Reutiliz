@@ -18,7 +18,7 @@ return new class extends Migration
         $table->text('description');
         $table->string('city');
         $table->string('category');
-        $table->boolean('is_free');
+        $table->boolean('is_free')->default(false);
         $table->decimal('price', 8, 2)->nullable();
         $table->string('image');
         $table->timestamp('created_at')->useCurrent();
