@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Item;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ItemController extends Controller
 {
@@ -97,14 +98,36 @@ class ItemController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        // Base validation rules
+        $rules = [
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'price' => 'required|numeric',
             'city' => 'required|string|max:255',
             'category' => 'nullable|string|max:255',
-            // Add other fields as needed
-        ]);
+            'is_free' => 'required|in:0,1',
+            'user_id' => 'required|exists:users,id',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+        ];
+
+        // Add price validation only if not free
+        if ($request->is_free == '0') {
+            $rules['price'] = 'required|numeric|min:0';
+        }
+
+        $validated = $request->validate($rules);
+
+        // Handle price based on is_free
+        if ($request->is_free == '1') {
+            $validated['price'] = null; // Set to null for free items
+        } else {
+            $validated['price'] = $request->price;
+        }
+
+        // Handle image upload
+        if ($request->hasFile('image')) {
+            $validated['image'] = $request->file('image')->store('annonces', 'public');
+        }
+
         Item::create($validated);
         return redirect()->route('admin.annonces.index')->with('success', 'Annonce créée avec succès.');
     }
@@ -114,7 +137,8 @@ class ItemController extends Controller
      */
     public function edit(Item $item)
     {
-        return view('admin.annonces-edit', compact('item'));
+        $users = \App\Models\User::all();
+        return view('admin.annonces-edit', compact('item', 'users'));
     }
 
     /**
@@ -122,16 +146,46 @@ class ItemController extends Controller
      */
     public function update(Request $request, Item $item)
     {
-        $validated = $request->validate([
+        // Base validation rules
+        $rules = [
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'price' => 'required|numeric',
             'city' => 'required|string|max:255',
             'category' => 'nullable|string|max:255',
-            // Add other fields as needed
-        ]);
+            'is_free' => 'required|in:0,1',
+            'user_id' => 'required|exists:users,id',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+        ];
+
+        // Add price validation only if not free
+        if ($request->is_free == '0') {
+            $rules['price'] = 'required|numeric|min:0';
+        }
+
+        $validated = $request->validate($rules);
+
+        // Handle price based on is_free
+        if ($request->is_free == '1') {
+            $validated['price'] = null; // Set to null for free items
+        } else {
+            $validated['price'] = $request->price;
+        }
+
+        // Handle image upload
+        if ($request->hasFile('image')) {
+            // Delete old image if exists
+            if ($item->image && Storage::exists('public/' . $item->image)) {
+                Storage::delete('public/' . $item->image);
+            }
+            
+            // Store new image
+            $validated['image'] = $request->file('image')->store('annonces', 'public');
+        }
+
+        // Update the announcement
         $item->update($validated);
-        return redirect()->route('admin.annonces.index')->with('success', 'Annonce mise à jour avec succès.');
+
+        return redirect()->route('admin.annonces.index')->with('success', 'Annonce mise à jour avec succès!');
     }
 
     /**
@@ -139,6 +193,11 @@ class ItemController extends Controller
      */
     public function destroy(Item $item)
     {
+        // Delete associated image if exists
+        if ($item->image && Storage::exists('public/' . $item->image)) {
+            Storage::delete('public/' . $item->image);
+        }
+        
         $item->delete();
         return redirect()->route('admin.annonces.index')->with('success', 'Annonce supprimée avec succès.');
     }

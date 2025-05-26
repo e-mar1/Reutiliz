@@ -75,7 +75,8 @@ class UserController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'phone' => 'required|string|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
-            // Add other fields as needed
+            'role' => 'required|in:user,admin',
+            'address' => 'nullable|string|max:255',
         ]);
         $validated['password'] = bcrypt($validated['password']);
         User::create($validated);
@@ -99,7 +100,8 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
             'phone' => 'required|string|max:255|unique:users,phone,' . $user->id,
-            // Add other fields as needed
+            'role' => 'required|in:user,admin',
+            'address' => 'nullable|string|max:255',
         ]);
         $user->update($validated);
         return redirect()->route('admin.users.index')->with('success', 'Utilisateur mis à jour avec succès.');

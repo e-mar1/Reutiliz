@@ -82,7 +82,7 @@
                             </div>
                         @endif
                         <form method="GET" action="" class="relative w-full md:w-1/5 flex">     
-                        <input type="text" name="search" id="search" value="{{ request('search') }}" placeholder="Titre ou Nom..." class="form-input h-8 text-xs px-2 border border-gray-300 rounded-md bg-white w-full">
+                        <input type="text" name="search" id="search" value="{{ request('search') }}" placeholder="Titre ou Nom..." class="form-input h-8 text-xs px-2 border border-gray-300 rounded-l-md bg-white w-full">
                                 <button type="submit" class="bg-gray-600 hover:bg-blue-700 text-white px-3 rounded-r-md flex items-center h-8 text-xs"><i class="fas fa-search"></i></button>
                             </form>
                         <div class="overflow-x-auto">

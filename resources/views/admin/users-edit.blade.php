@@ -30,25 +30,32 @@
             <input type="email" name="email" value="{{ old('email', $user->email) }}" class="form-input h-8 text-xs px-2 border border-gray-300 rounded-md bg-white w-full" required>
         </div>
         <div class="mb-4">
-            <label class="block text-sm font-semibold text-gray-700 mb-1">Rôle</label>
-            <input type="text" name="role" value="{{ old('role', $user->role) }}" class="form-input h-8 text-xs px-2 border border-gray-300 rounded-md bg-white w-full">
+            <label class="block text-sm font-semibold text-gray-700 mb-1">Téléphone</label>
+            <input type="text" name="phone" value="{{ old('phone', $user->phone) }}" class="form-input h-8 text-xs px-2 border border-gray-300 rounded-md bg-white w-full" required>
         </div>
         <div class="mb-4">
-            <label class="block text-sm font-semibold text-gray-700 mb-1">Statut</label>
-            <input type="text" name="status" value="{{ old('status', $user->status) }}" class="form-input h-8 text-xs px-2 border border-gray-300 rounded-md bg-white w-full">
+            <label class="block text-sm font-semibold text-gray-700 mb-1">Adresse</label>
+            <input type="text" name="address" value="{{ old('address', $user->address) }}" class="form-input h-8 text-xs px-2 border border-gray-300 rounded-md bg-white w-full">
         </div>
-        <div class="flex justify-between items-center mt-8 gap-2">
-            <button type="submit" class="bg-blue-600 text-sm hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg shadow transition">
+        <div class="mb-4">
+            <label class="block text-sm font-semibold text-gray-700 mb-1">Rôle</label>
+            <select name="role" class="form-input h-8 text-xs px-2 border border-gray-300 rounded-md bg-white w-full">
+                <option value="user" {{ old('role', $user->role) == 'user' ? 'selected' : '' }}>Utilisateur</option>
+                <option value="admin" {{ old('role', $user->role) == 'admin' ? 'selected' : '' }}>Admin</option>
+            </select>
+        </div>
+           <div class="flex flex-col sm:flex-row justify-between items-center mt-8 gap-2">
+            <button type="submit" class="bg-blue-600 text-sm hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg shadow transition flex items-center justify-center w-full sm:w-auto">
                 <i class="fas fa-save mr-1"></i>Enregistrer
             </button>
-            <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')" class="inline">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="bg-red-600 text-sm hover:bg-red-700 text-white font-semibold px-6 py-2 rounded-lg shadow transition">
-                    <i class="fas fa-trash mr-1"></i>Supprimer
-                </button>
-            </form>
-        </div>
-    </form>
+        </form>
+        <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')" class="w-full sm:w-auto">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="bg-red-600 text-sm hover:bg-red-700 text-white font-semibold px-6 py-2 rounded-lg shadow transition flex items-center justify-center w-full sm:w-auto">
+                <i class="fas fa-trash mr-1"></i>Supprimer
+            </button>
+        </form>
+    </div>
 </div>
 @endsection

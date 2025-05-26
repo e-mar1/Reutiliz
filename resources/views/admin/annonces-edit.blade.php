@@ -18,7 +18,9 @@
             </ul>
         </div>
     @endif
-    <form method="POST" action="{{ route('admin.annonces.update', $item->id) }}">
+    
+    <!-- UPDATE FORM -->
+    <form method="POST" action="{{ route('admin.annonces.update', $item->id) }}" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         <div class="mb-4">
@@ -44,7 +46,7 @@
         </div>
         <div class="mb-4" id="price-input-wrapper">
             <label class="block text-sm font-semibold text-gray-700 mb-1">Prix</label>
-            <input type="number" name="price" id="price-input" value="{{ old('price', $item->price) }}" class="form-input h-8 text-xs px-2 border border-gray-300 rounded-md bg-white w-full" min="0" {{ old('is_free', $item->price == 0 ? '1' : '') == '1' ? 'disabled' : '' }} required>
+            <input type="number" name="price" id="price-input" value="{{ old('price', $item->price) }}" class="form-input h-8 text-xs px-2 border border-gray-300 rounded-md bg-white w-full" min="0" {{ old('is_free', $item->price == 0 ? '1' : '') == '1' ? 'disabled' : '' }}>
         </div>
         <div class="mb-4">
             <label class="block text-sm font-semibold text-gray-700 mb-1">Ville</label>
@@ -55,36 +57,53 @@
             <input type="text" name="category" value="{{ old('category', $item->category) }}" class="form-input h-8 text-xs px-2 border border-gray-300 rounded-md bg-white w-full">
         </div>
         <div class="mb-4">
-            <label class="block text-sm font-semibold text-gray-700 mb-1">Statut</label>
-            <input type="text" name="status" value="{{ old('status', $item->status) }}" class="form-input h-8 text-xs px-2 border border-gray-300 rounded-md bg-white w-full">
+            <label class="block text-sm font-semibold text-gray-700 mb-1">Utilisateur</label>
+            <input type="text" value="{{ $item->user->name ?? '' }}" class="form-input h-8 text-xs px-2 border border-gray-300 rounded-md bg-white w-full" disabled>
+            <input type="hidden" name="user_id" value="{{ old('user_id', $item->user_id) }}">
         </div>
-        <div class="flex justify-between items-center mt-8 gap-2">
-            <button type="submit" class="bg-green-600 text-sm hover:bg-green-700 text-white font-semibold px-6 py-2 rounded-lg shadow transition">
+        <div class="mb-4">
+            <label class="block text-sm font-semibold text-gray-700 mb-1">Image</label>
+            <input type="file" name="image" class="form-input h-8 text-xs px-2 border border-gray-300 rounded-md bg-white w-full">
+            @if($item->image)
+                <img src="{{ asset('storage/'.$item->image) }}" alt="Image actuelle" class="mt-2 h-16">
+            @endif
+        </div>
+        
+        <!-- BUTTONS ON SAME LINE -->
+        <div class="flex flex-col sm:flex-row justify-between items-center mt-8 gap-3">
+            <button type="submit" class="bg-green-600 text-sm hover:bg-green-700 text-white font-semibold px-6 py-2 rounded-lg shadow transition flex items-center justify-center w-full sm:w-auto">
                 <i class="fas fa-save mr-1"></i>Enregistrer
             </button>
-            <form action="{{ route('admin.annonces.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ?')" class="inline">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="bg-red-600 text-sm hover:bg-red-700 text-white font-semibold px-6 py-2 rounded-lg shadow transition">
-                    <i class="fas fa-trash mr-1"></i>Supprimer
-                </button>
-            </form>
-        </div>
     </form>
+    
+    <!-- DELETE FORM (SEPARATE BUT INLINE) -->
+    <form action="{{ route('admin.annonces.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ?')" class="w-full sm:w-auto">
+        @csrf
+        @method('DELETE')
+        <button type="submit" class="bg-red-600 text-sm hover:bg-red-700 text-white font-semibold px-6 py-2 rounded-lg shadow transition flex items-center justify-center w-full sm:w-auto">
+            <i class="fas fa-trash mr-1"></i>Supprimer
+        </button>
+    </form>
+        </div>
 </div>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const freeRadio = document.querySelector('input[name="is_free"][value="1"]');
         const priceRadio = document.querySelector('input[name="is_free"][value="0"]');
         const priceInput = document.getElementById('price-input');
+        
         function togglePriceInput() {
             if (freeRadio.checked) {
                 priceInput.value = 0;
                 priceInput.setAttribute('disabled', 'disabled');
+                priceInput.removeAttribute('required');
             } else {
                 priceInput.removeAttribute('disabled');
+                priceInput.setAttribute('required', 'required');
             }
         }
+        
         freeRadio.addEventListener('change', togglePriceInput);
         priceRadio.addEventListener('change', togglePriceInput);
         togglePriceInput();
