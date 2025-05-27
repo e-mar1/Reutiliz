@@ -29,6 +29,8 @@ class ItemFactory extends Factory
             'price' => $isFree ? null : fake()->randomFloat(2, 5, 500),
             'image' => fake()->imageUrl(),
             'created_at' => now(),
+            'admin_whatsapp' => '2126' . fake()->randomNumber(8, true),
+            'admin_email' => fake()->unique()->safeEmail(), 
         ];
     }
 }

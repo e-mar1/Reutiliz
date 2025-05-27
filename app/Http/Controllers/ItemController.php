@@ -237,4 +237,30 @@ class ItemController extends Controller
         ]);
         return back()->with('success', 'Merci, votre signalement a été pris en compte.');
     }
+
+    public function show($id)
+        {
+             $item = Item::findOrFail($id);
+             
+             return view('components.show-details', compact('item'));
+     } 
+
+     public function toggleFavorite(Item $item)
+    {
+        // تأكد أن المستخدم مسجل الدخول
+        if (!Auth::check()) {
+            return redirect()->back()->with('error', 'Veuillez vous connecter pour ajouter aux favoris.');
+        }
+
+        $user = Auth::user();
+
+        // Check if the item is already favorited by the user
+        if ($user->favorites->contains($item->id)) {
+            $user->favorites()->detach($item->id); // Remove from favorites
+            return redirect()->back()->with('success', 'Article retiré de vos favoris.');
+        } else {
+            $user->favorites()->attach($item->id); // Add to favorites
+            return redirect()->back()->with('success', 'Article ajouté à vos favoris.');
+        }
+    }
 }

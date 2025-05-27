@@ -1,11 +1,9 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-
 use App\Http\Controllers\HomeController;
+
 use App\Http\Controllers\ItemController;
-use App\Http\Controllers\UserController;
 
 Route::get('/', [ItemController::class, 'index'])->name('welcome');
 
@@ -22,6 +20,15 @@ Route::middleware('auth')->group(function () {
 require __DIR__.'/auth.php';
 
 Route::get('admin/dashboard', [HomeController::class, 'index'])->name('admin.dashboard')->middleware(['auth', 'admin']);
+
+//page details
+Route::get('/item/{id}', [ItemController::class, 'show'])->name('components.show-details');
+// New: Favorite Route
+Route::post('/items/{item}/favorite', [ItemController::class, 'toggleFavorite'])->name('items.toggleFavorite');
+
+// New: Report Routes
+Route::get('/reports/create', [ReportController::class, 'create'])->name('reports.create');
+Route::post('/reports', [ReportController::class, 'store'])->name('reports.store');
 
 Route::get('/category/{category}', [ItemController::class, 'category'])->name('category.items');
 
