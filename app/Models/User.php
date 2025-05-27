@@ -18,6 +18,10 @@ class User extends Authenticatable
 
     public $timestamps = false;
 
+    protected $casts = [
+        'created_at' => 'datetime',
+    ];
+
     // Relations
     public function items()
     {
@@ -44,8 +48,8 @@ class User extends Authenticatable
         return $this->hasMany(Comment::class);
     }
 
-    public function commands()
+    public function orders()
     {
-        return $this->hasMany(Command::class);
+        return $this->hasMany(Order::class);
     }
 }

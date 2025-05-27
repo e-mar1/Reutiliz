@@ -1,7 +1,8 @@
+@php use Illuminate\Support\Str; @endphp
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Reutiliz - Annonces de Qualité</title>
+    <title>Reutiliz - Détail de l'annonce</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" rel="stylesheet">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.10.5/dist/cdn.min.js"></script>
@@ -78,112 +79,75 @@
 
         </header>
         <!-- Main Content -->
-        <main class="py-8">
-            <div class="container mx-auto px-4">
-                <!-- Filters Section -->
-                  <div class="max-w-7xl mx-auto px-4">
-                <!-- Catégories populaires Section -->
-                @if(isset($popularCategories) && count($popularCategories) > 0)
-                <section class="mb-6">
-                    <h2 class="text-lg font-semibold text-gray-800 mb-2 flex items-center"><i class="fas fa-fire text-orange-500 mr-2"></i>Catégories populaires</h2>
-                    <div class="flex flex-wrap gap-2">
-                        @foreach($popularCategories as $category)
-                            <a href="{{ route('category.items', $category) }}" class="inline-block bg-blue-100 text-blue-700 text-xs font-semibold rounded px-3 py-1 hover:bg-blue-200 transition">{{ $category }}</a>
-                        @endforeach
+        <main class="py-8 ">
+            <div class="container mx-auto px-">
+                <div class="max-w-7xl mx-auto px-4 bg-white rounded-xl shadow p-6 md:p-10 flex flex-col md:flex-row gap-8">
+                    <div class="md:w-1/2 flex flex-col items-center relative">
+                        <img src="{{ asset('storage/'.$item->image) }}" alt="{{ $item->title }}" class="rounded-xl w-full object-cover object-center mb-4 max-h-96">
+                        <form method="POST" action="{{ route('items.report', $item->id) }}" class="absolute left-0 bottom-3 m-4">
+                            @csrf
+                            <button type="submit" class="btn-secondary-outline text-sm py-2 text-red-600 border-red-400 bg-red-50 flex items-center justify-center px-3 rounded">
+                                <i class="fas fa-flag fa-lg mr-1"></i>Signaler
+                            </button>
+                        </form>
                     </div>
-                </section>
-                @endif
-            
-            
-            
-                
-<section aria-labelledby="filter-heading" class="bg-white p-4 md:p-6 rounded-xl shadow mb-8 max-w-7xl mx-auto">
-    <form action="{{ route('welcome') }}" method="GET">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
-            <div>
-                <label for="search" class="block text-xs font-medium text-gray-600 mb-1">Mot-clé</label>
-                <input type="text" name="search" id="search" value="{{ request('search') }}" placeholder="Ex: Smartphone..." class="form-input h-8 text-xs px-2 border border-gray-300 rounded-md bg-white w-full">
-            </div>
-            <div>
-                <label for="city" class="block text-xs font-medium text-gray-600 mb-1">Ville</label>
-                <select name="city" id="city" class="form-select h-8 text-xs px-2 border border-gray-300 rounded-md bg-white w-full">
-                    <option value="">Toutes</option>
-                    @foreach($cities as $city)
-                        <option value="{{ $city }}" {{ request('city') == $city ? 'selected' : '' }}>{{ $city }}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div>
-                <label for="min_price" class="block text-xs font-medium text-gray-600 mb-1">Prix min</label>
-                <input type="number" name="min_price" id="min_price" value="{{ request('min_price') }}" placeholder="0" class="form-input h-8 text-xs px-2 border border-gray-300 rounded-md bg-white w-full">
-            </div>
-            <div>
-                <label for="max_price" class="block text-xs font-medium text-gray-600 mb-1">Prix max</label>
-                <input type="number" name="max_price" id="max_price" value="{{ request('max_price') }}" placeholder="Illimité" class="form-input h-8 text-xs px-2 border border-gray-300 rounded-md bg-white w-full">
-            </div>
-        </div>
-        <div class="flex flex-col md:flex-row justify-end gap-2 mt-3">
-            <a href="{{ route('welcome') }}" class="btn-secondary-outline px-3 py-1 text-xs h-8 flex items-center justify-center md:w-auto w-full"><i class="fas fa-undo-alt mr-1"></i>Réinit.</a>
-            <button type="submit" class="btn-primary-solid px-3 py-1 text-xs h-8 flex items-center justify-center md:w-auto w-full"><i class="fas fa-filter mr-1"></i>Filtrer</button>
-        </div>
-    </form>
-</section>
-<!-- Nouvelles annonces Section Title -->
-                <div class="flex items-center mb-4 mt-8">
-                    <h2 class="text-xl font-bold text-gray-900 flex items-center">
-                        <i class="fas fa-bolt text-yellow-400 mr-2"></i>
-                        @isset($currentCategory)
-                            Catégorie : {{ $currentCategory }}
-                        @else
-                            Nouvelles annonces
-                        @endisset
-                    </h2>
-                </div>
-
-                @if($items->count() > 0)
-                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-                        @foreach($items as $item)
-                            <article class="bg-white rounded-xl shadow hover:shadow-lg transition-all duration-200 flex flex-col overflow-hidden">
-                                <a href="#" class="block bg-gray-100 aspect-[4/3] overflow-hidden">
-                                    <img src="https://inmedia.ma/wp-content/uploads/2024/12/pc-gamer-asus.webp" alt="{{ $item->title }}" class="w-full h-full object-cover object-center transition-transform duration-200 hover:scale-105">
+                    <div class="md:w-1/2 flex flex-col gap-4">
+                    <div class="flex items-center gap-4 mb-2">
+                            <span class="inline-block bg-blue-100 text-blue-700 text-sm font-semibold rounded px-3 py-1">
+                                <i class="fas fa-box fa-lg mr-2"></i>{{ $item->category ?: 'Non classé' }}
+                            </span>
+                            <span class="text-sm text-gray-500 flex items-center">
+                                <i class="fas fa-map-marker-alt fa-lg mr-1"></i>{{ $item->city ?: 'Ville non spécifiée' }}
+                            </span>
+                        </div>
+                        <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ $item->title }}</h1>
+                        <p class="text-gray-700 text-base mb-2">{{ $item->description }}</p>
+                        
+                        <div class="flex items-center gap-4 mb-4">
+                            <span class="text-xl font-bold text-blue-600">{{ $item->is_free ? 'Gratuit' : number_format($item->price, 2, ',', ' ') . ' €' }}</span>
+                        </div>
+                        <div class="flex gap-2 mb-4">
+                            <button class="btn-primary-solid flex-1 text-sm py-2"><i class="fas fa-shopping-cart fa-lg mr-1"></i>Acheter</button>
+                            <button class="btn-secondary-outline flex-1 text-sm py-2"><i class="fas fa-heart fa-lg mr-1"></i>Favori</button>
+                        </div>
+                        <div class="flex justify-between items-center text-xs text-gray-400 mb-4">
+                            <div>
+                                Annonce publiée par <span class="font-semibold text-gray-700"> {{ $item->user->name ?? 'Utilisateur inconnu' }}</span>
+                            </div>
+                            <div class="flex">
+                                <a href="https://wa.me/?text={{ urlencode('Regarde cet article: ' . route('items.show', $item->id)) }}" target="_blank" class="btn-secondary-outline text-sm py-2 text-green-600 flex items-center justify-center px-2 rounded-l-md hover:bg-green-50 border-0">
+                                    <i class="fab fa-whatsapp fa-3x"></i>
                                 </a>
-                                <div class="p-4 flex flex-col flex-grow">
-                                    <span class="inline-block bg-blue-100 text-blue-700 text-xs font-semibold rounded px-2 py-0.5 mb-2">{{ $item->category ?: 'Non classé' }}</span>
-                                    <h3 class="text-base font-semibold text-gray-900 mb-1 leading-tight">
-                                        <a href="{{ route('items.show', $item->id) }}" class="hover:text-blue-600 transition-colors">{{ Str::limit($item->title, 45) }}</a>
-                                    </h3>
-                                    <p class="text-xs text-gray-500 mb-2 flex items-center"><i class="fas fa-map-marker-alt mr-1 text-gray-400"></i>{{ $item->city ?: 'Ville non spécifiée' }}</p>
-                                    <p class="text-gray-600 text-xs mb-3 flex-grow">{{ Str::limit($item->description, 60) }}</p>
-                                    <div class="mt-auto flex flex-col gap-2">
-                                        <span class="text-lg font-bold text-blue-600">{{ $item->is_free ? 'Gratuit' : number_format($item->price, 2, ',', ' ') . ' €' }}</span>
-                                        <div class="flex gap-2">
-                                            <button onclick="window.location='{{ route('items.show', $item->id) }}'" class="flex-1 btn-primary-solid text-xs py-2"><i class="fas fa-shopping-cart mr-1"></i>Acheter</button>
-                                            <button class="flex-1 btn-secondary-outline text-xs py-2"><i class="fas fa-heart mr-1"></i>Favori</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </article>
-                        @endforeach
-                    </div>
-                    <!-- Pagination -->
-                    <nav aria-label="Pagination" class="mt-8 flex items-center justify-center">
-                        {{ $items->appends(request()->query())->links('vendor.pagination.tailwind') }} 
-                    </nav>
-                @else
-                    <div class="text-center py-16 bg-white rounded-xl shadow">
-                        <i class="fas fa-box-open fa-4x text-gray-300 mb-4"></i>
-                        <h3 class="text-xl font-semibold text-gray-800 mb-1">Aucun résultat</h3>
-                        <p class="text-gray-600 max-w-md mx-auto text-sm">Nous n'avons trouvé aucun article correspondant à vos critères. Essayez d'élargir votre recherche ou de modifier vos filtres.</p>
-                        <div class="mt-4">
-                            <a href="{{ route('welcome') }}" class="btn-primary-solid text-sm px-4 py-2"><i class="fas fa-sync-alt mr-1"></i>Réinitialiser</a>
+                                <a href="mailto:?subject={{ urlencode('Regarde cet article sur Reutiliz') }}&body={{ urlencode(route('items.show', $item->id)) }}" class="btn-secondary-outline text-sm py-2 text-blue-600 flex items-center justify-center px-2 rounded-r-md hover:bg-blue-50 border-0">
+                                    <i class="fas fa-envelope fa-3x"></i>
+                                </a>
+                            </div>
                         </div>
                     </div>
+                </div>
+
+                @if(isset($relatedItems) && $relatedItems->count() > 0)
+                <div class="max-w-7xl mx-auto px-4 mt-10">
+                    <h2 class="text-lg font-semibold text-gray-800 mb-4 flex items-center"><i class="fas fa-link text-blue-400 mr-2"></i>Articles similaires</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+                        @foreach($relatedItems as $related)
+                        <a href="{{ route('items.show', $related->id) }}" class="bg-white rounded-xl shadow hover:shadow-lg transition-all duration-200 flex flex-col overflow-hidden">
+                            <img src="{{ asset('storage/'.$related->image) }}" alt="{{ $related->title }}" class="w-full h-48 object-cover object-center">
+                            <div class="p-5 flex flex-col flex-grow">
+                                <span class="inline-block bg-blue-100 text-blue-700 text-xs font-semibold rounded px-2.5 py-1 mb-2"><i class="fas fa-tag fa-sm mr-1.5"></i>{{ $related->category ?: 'Non classé' }}</span>
+                                <h3 class="text-lg font-semibold text-gray-900 mb-1.5 leading-tight">{{ Str::limit($related->title, 50) }}</h3>
+                                <span class="text-xs text-gray-500 mb-1.5 flex items-center"><i class="fas fa-map-marker-alt fa-sm mr-1.5"></i>{{ $related->city ?: 'Ville non spécifiée' }}</span>
+                                <span class="text-lg text-blue-600 font-bold">{{ $related->is_free ? 'Gratuit' : number_format($related->price, 2, ',', ' ') . ' €' }}</span>
+                            </div>
+                        </a>
+                        @endforeach
+                    </div>
+                </div>
                 @endif
             </div>
         </main>
         <!-- Footer -->
-        
-<footer class="bg-gray-900 text-gray-300 mt-10">
+        <footer class="bg-gray-900 text-gray-300 mt-10">
     <div class="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col md:flex-row md:justify-between md:items-start gap-8">
             <!-- Logo and Description -->
@@ -242,6 +206,5 @@
         </div>
     </div>
 </footer>
-
     </div>
 </body>
