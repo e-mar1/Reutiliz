@@ -237,4 +237,22 @@ class ItemController extends Controller
         ]);
         return back()->with('success', 'Merci, votre signalement a été pris en compte.');
     }
+    public function contact(Request $request, $itemId)
+{
+    $request->validate([
+        'from' => 'required|email',
+        'to' => 'required|email',
+        'subject' => 'required|string|max:255',
+        'description' => 'required|string',
+    ]);
+
+    // Send email logic (example using Laravel's Mail)
+    \Mail::raw($request->description, function ($message) use ($request) {
+        $message->to($request->to)
+                ->from($request->from)
+                ->subject($request->subject);
+    });
+
+    return back()->with('success', 'Votre message a été envoyé au vendeur.');
+}
 }

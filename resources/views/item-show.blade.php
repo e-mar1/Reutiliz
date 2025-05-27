@@ -153,12 +153,70 @@
                                 Annonce publiée par <span class="font-semibold text-gray-700"> {{ $item->user->name ?? 'Utilisateur inconnu' }}</span>
                             </div>
                             <div class="flex">
-                                <a href="https://wa.me/?text={{ urlencode('Regarde cet article: ' . route('items.show', $item->id)) }}" target="_blank" class="btn-secondary-outline text-sm py-2 text-green-600 flex items-center justify-center px-2 rounded-l-md hover:bg-green-50 border-0">
-                                    <i class="fab fa-whatsapp fa-3x"></i>
-                                </a>
-                                <a href="mailto:?subject={{ urlencode('Regarde cet article sur Reutiliz') }}&body={{ urlencode(route('items.show', $item->id)) }}" class="btn-secondary-outline text-sm py-2 text-blue-600 flex items-center justify-center px-2 rounded-r-md hover:bg-blue-50 border-0">
-                                    <i class="fas fa-envelope fa-3x"></i>
-                                </a>
+                                
+                                    @php
+                                        // Format WhatsApp number for Morocco (remove leading 0, add 212)
+                                        $rawPhone = preg_replace('/\D/', '', $item->user->phone ?? '');
+                                        if(Str::startsWith($rawPhone, '0')) {
+                                            $whatsappNumber = '212' . substr($rawPhone, 1);
+                                        } else {
+                                            $whatsappNumber = '212' . $rawPhone;
+                                        }
+                                        // WhatsApp message with item name (no image)
+                                        $waMessage = "Bonjour, je suis intéressé par votre annonce \"" . $item->title . "\" sur Reutiliz: " . route('items.show', $item->id);
+                                    @endphp
+
+                                    <a href="https://wa.me/{{ $whatsappNumber }}?text={{ urlencode($waMessage) }}" 
+                                       target="_blank" 
+                                       class="btn-secondary-outline text-sm py-2 text-green-600 flex items-center justify-center px-2 rounded-l-md hover:bg-green-50 border-0">
+                                        <i class="fab fa-whatsapp fa-3x"></i>
+                                    </a>
+                                <div x-data="{ showMailModal: false }" class="inline">
+                                    <button 
+                                        @click="showMailModal = true"
+                                        type="button"
+                                        class="btn-secondary-outline text-sm py-2 text-blue-600 flex items-center justify-center px-2 rounded-r-md hover:bg-blue-50 border-0"
+                                        style="background: none; border: none;"
+                                    >
+                                        <i class="fas fa-envelope fa-3x"></i>
+                                    </button>
+                                    <!-- Modal -->
+                                    <div 
+                                        x-show="showMailModal"
+                                        style="background: rgba(0,0,0,0.4)"
+                                        class="fixed inset-0 flex items-center justify-center z-50"
+                                    >
+                                        <div class="bg-white rounded-xl shadow-lg max-w-md w-full p-8 relative">
+                                            <button 
+                                                class="absolute top-3 right-3 text-gray-400 hover:text-gray-700 text-2xl"
+                                                @click="showMailModal = false"
+                                            >&times;</button>
+                                            <h2 class="text-lg font-semibold mb-4 text-blue-700 flex items-center"><i class="fas fa-envelope mr-2"></i>Envoyer un email au vendeur</h2>
+                                            <form method="POST" action="{{ route('items.contact', $item->id) }}">
+                                                @csrf
+                                                <div class="mb-3">
+                                                    <label class="block text-sm font-medium mb-1">De</label>
+                                                    <input type="email" name="from" required class="w-full border rounded px-3 py-2" placeholder="Votre email">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="block text-sm font-medium mb-1">À</label>
+                                                    <input type="email" name="to" readonly class="w-full border rounded px-3 py-2 bg-gray-100" value="{{ $item->user->email ?? '' }}">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="block text-sm font-medium mb-1">Sujet</label>
+                                                    <input type="text" name="subject" required class="w-full border rounded px-3 py-2" value="À propos de votre annonce: {{ $item->title }}">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="block text-sm font-medium mb-1">Description</label>
+                                                    <textarea name="description" required class="w-full border rounded px-3 py-2" rows="4" placeholder="Votre message"></textarea>
+                                                </div>
+                                                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded mt-2">
+                                                    Envoyer
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
