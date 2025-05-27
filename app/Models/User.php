@@ -31,7 +31,12 @@ class User extends Authenticatable
 
     public function favorites()
     {
-        return $this->hasMany(Favorite::class);
+        return $this->belongsToMany(Item::class, 'favorites', 'user_id', 'item_id');
+        // الشرح:
+        // Item::class: الموديل اللي كيتربط بيه الـ User (اللي هو Item).
+        // 'favorites': هذا هو اسم الـ pivot table ديالك فالداتابيز.
+        // 'user_id': الـ foreign key ديال هذا الموديل (User) في الـ pivot table.
+        // 'item_id': الـ foreign key ديال الموديل الآخر (Item) في الـ pivot table.
     }
 
     public function comments()

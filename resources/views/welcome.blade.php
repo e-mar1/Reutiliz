@@ -106,7 +106,7 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
                         @foreach($items as $item)
                             <article class="bg-white rounded-xl shadow hover:shadow-lg transition-all duration-200 flex flex-col overflow-hidden">
-                                <a href="#" class="block bg-gray-100 aspect-[4/3] overflow-hidden">
+                                <a href="{{ route('components.show-details', $item->id) }}">
                                     <img src="https://inmedia.ma/wp-content/uploads/2024/12/pc-gamer-asus.webp" alt="{{ $item->title }}" class="w-full h-full object-cover object-center transition-transform duration-200 hover:scale-105">
                                 </a>
                                 <div class="p-4 flex flex-col flex-grow">
