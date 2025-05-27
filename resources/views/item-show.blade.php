@@ -94,7 +94,7 @@
                     <div class="md:w-1/2 flex flex-col gap-4">
                     <div class="flex items-center gap-4 mb-2">
                             <span class="inline-block bg-blue-100 text-blue-700 text-sm font-semibold rounded px-3 py-1">
-                                <i class="fas fa-box fa-lg mr-2"></i>{{ $item->category ?: 'Non classé' }}
+                                <i class="fas fa-tag fa-lg mr-2"></i>{{ $item->category ?: 'Non classé' }}
                             </span>
                             <span class="text-sm text-gray-500 flex items-center">
                                 <i class="fas fa-map-marker-alt fa-lg mr-1"></i>{{ $item->city ?: 'Ville non spécifiée' }}
@@ -106,9 +106,47 @@
                         <div class="flex items-center gap-4 mb-4">
                             <span class="text-xl font-bold text-blue-600">{{ $item->is_free ? 'Gratuit' : number_format($item->price, 2, ',', ' ') . ' €' }}</span>
                         </div>
-                        <div class="flex gap-2 mb-4">
-                            <button class="btn-primary-solid flex-1 text-sm py-2"><i class="fas fa-shopping-cart fa-lg mr-1"></i>Acheter</button>
-                            <button class="btn-secondary-outline flex-1 text-sm py-2"><i class="fas fa-heart fa-lg mr-1"></i>Favori</button>
+                        <div x-data="{ showPhoneModal: false }">
+                            <div class="flex gap-2 mb-4">
+                                <button 
+                                    class="flex-1 text-sm py-2 rounded bg-blue-600 hover:bg-blue-700 text-white font-semibold transition"
+                                    @click="showPhoneModal = true"
+                                    type="button"
+                                >
+                                    <i class="fas fa-phone fa-lg mr-2"></i>Contacter le Vendeur
+                                </button>
+                                <button class="flex-1 text-sm py-2 rounded bg-pink-100 hover:bg-pink-200 text-pink-600 font-semibold transition">
+                                    <i class="fas fa-heart fa-lg mr-1"></i>Favori
+                                </button>
+                            </div>
+
+                            <!-- Modal -->
+                            <div 
+                                x-show="showPhoneModal" 
+                                style="background: rgba(0,0,0,0.4)" 
+                                class="fixed inset-0 flex items-center justify-center z-50"
+                            >
+                                <div class="bg-white rounded-xl shadow-lg max-w-md w-full p-8 relative">
+                                    <button 
+                                        class="absolute top-3 right-3 text-gray-400 hover:text-gray-700 text-2xl"
+                                        @click="showPhoneModal = false"
+                                    >&times;</button>
+                                    <div class="flex flex-col items-center">
+                                        <img src="https://cdn-icons-png.flaticon.com/512/565/565547.png" alt="Alerte" class="w-24 mb-4">
+                                        <div class="text-center mb-4">
+                                            <span class="text-red-600 font-bold text-lg">Attention !</span>
+                                            <p class="text-gray-700 text-sm mt-2">
+                                                Il ne faut jamais envoyer de l’argent à l’avance au vendeur par virement bancaire ou à travers une agence de transfert d’argent lors de l’achat des biens disponibles sur le site.
+                                            </p>
+                                        </div>
+                                        <div class="mb-2 text-gray-700">Appeler {{ $item->user->name ?? 'le vendeur' }}</div>
+                                        <button class="w-full border rounded px-4 py-2 text-lg font-semibold flex items-center justify-center gap-2 bg-gray-50 text-gray-800 cursor-default">
+                                            <i class="fas fa-phone"></i>
+                                            {{ $item->user->phone ?? 'Numéro non disponible' }}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="flex justify-between items-center text-xs text-gray-400 mb-4">
                             <div>
