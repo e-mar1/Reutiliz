@@ -27,7 +27,7 @@ class ItemFactory extends Factory
             'category' => fake()->word(),
             'is_free' => $isFree,
             'price' => $isFree ? null : fake()->randomFloat(2, 5, 500),
-            'image' => fake()->imageUrl(),
+        
             'created_at' => now(),
         ];
     }

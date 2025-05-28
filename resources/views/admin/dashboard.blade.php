@@ -15,67 +15,7 @@
 </head>
 <body class="antialiased">
     <div x-data="{ mobileMenuOpen: false }">
-        <!-- Header -->
-        <header class="bg-white/90 backdrop-blur sticky top-0 z-50 shadow-sm rounded-b-xl">
-            <div class="max-w-7xl mx-auto px-4 flex items-center justify-between h-16">
-                <a href="{{ route('welcome') }}" class="flex items-center space-x-2 text-xl font-bold text-blue-600">
-                    <i class="fas fa-recycle"></i>
-                    <span>Reutiliz</span>
-                </a>
-                
-<nav class="flex items-center space-x-2">
-    @auth
-        <div x-data="{ open: false }" class="relative">
-            <button @click="open = !open" class="flex items-center space-x-2 px-2 py-1 rounded text-xs text-gray-700 hover:text-blue-600 focus:outline-none">
-                <i class="fas fa-user-circle text-lg"></i>
-                <span class="hidden sm:inline">{{ Auth::user()->name }}</span>
-                <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
-            </button>
-            <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-50 py-1">
-                
-                <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2 px-4 py-2 text-xs text-gray-700 hover:bg-blue-50">
-                    <i class="fas fa-tachometer-alt"></i> Tableau de bord
-                </a>
-                <a href="{{ route('admin.annonces.index') }}" class="flex items-center gap-2 px-4 py-2 text-xs text-gray-700 hover:bg-blue-50">
-                    <i class="fas fa-bullhorn"></i> Annonces 
-                </a>
-                 <a href="{{ route('admin.users.index') }}" class="flex items-center gap-2 px-4 py-2 text-xs text-gray-700 hover:bg-blue-50">
-                    <i class="fas fa-user"></i> Utilisateurs
-                </a>
-                <a href="{{ route('profile.edit') }}" class="flex items-center gap-2 px-4 py-2 text-xs text-gray-700 hover:bg-blue-50">
-                    <i class="fas fa-cog"></i> Réglages
-                </a>
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="flex items-center gap-2 w-full text-left px-4 py-2 text-xs text-gray-700 hover:bg-blue-50">
-                        <i class="fas fa-sign-out-alt"></i> Se déconnecter
-                    </button>
-                </form>
-            </div>
-        </div>
-    @else
-        <a href="{{ route('login') }}" class="text-gray-700 hover:text-blue-600 px-2 py-1 rounded text-xs transition"><i class="fas fa-sign-in-alt mr-1"></i>Connexion</a>
-        <a href="{{ route('register') }}" class="text-gray-700 hover:text-blue-600 px-2 py-1 rounded text-xs transition"><i class="fas fa-user-plus mr-1"></i>S'inscrire</a>
-    @endauth
-</nav>
-
-<!-- Mobile Menu -->
-<div x-show="mobileMenuOpen" @click.away="mobileMenuOpen = false" class="sm:hidden border-t border-gray-200 bg-white shadow-md rounded-b-xl">
-    <div class="px-4 py-3 space-y-2">
-        @auth
-            <a href="{{ route('dashboard') }}" class="block px-3 py-1 rounded-md text-xs font-medium text-gray-700 hover:bg-gray-50 hover:text-blue-600">Dashboard</a>
-            <form method="POST" action="{{ route('logout') }}" class="block">
-                @csrf
-                <button type="submit" class="w-full text-left block px-3 py-1 rounded-md text-xs font-medium text-gray-700 hover:bg-gray-50 hover:text-blue-600"><i class="fas fa-sign-out-alt mr-1"></i>Déconnexion</button>
-            </form>
-        @else
-            <a href="{{ route('login') }}" class="block px-3 py-1 rounded-md text-xs font-medium text-gray-700 hover:bg-gray-50 hover:text-blue-600"><i class="fas fa-sign-in-alt mr-1"></i>Connexion</a>
-            <a href="{{ route('register') }}" class="block px-3 py-1 rounded-md text-xs font-medium text-gray-700 hover:bg-gray-50 hover:text-blue-600"><i class="fas fa-user-plus mr-1"></i>S'inscrire</a>
-        @endauth
-    </div>
-</div>
-
-        </header>
+        <x-header />
         <!-- Main Content -->
         <main class="py-8">
             <div class="container mx-auto px-4">

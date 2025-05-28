@@ -15,18 +15,7 @@
 </head>
 <body class="antialiased">
     <div class="min-h-screen flex flex-col">
-        <header class="bg-white/90 backdrop-blur sticky top-0 z-50 shadow-sm rounded-b-xl">
-            <div class="max-w-7xl mx-auto px-4 flex items-center justify-between h-16">
-                <a href="{{ route('welcome') }}" class="flex items-center space-x-2 text-xl font-bold text-blue-600">
-                    <i class="fas fa-recycle"></i>
-                    <span>Reutiliz</span>
-                </a>
-                <nav class="flex items-center space-x-2">
-                    <a href="{{ route('admin.dashboard') }}" class="text-gray-700 hover:text-blue-600 px-2 py-1 rounded text-xs transition"><i class="fas fa-home mr-1"></i>Home</a>
-                    <a href="{{ route('profile.edit') }}" class="text-blue-600 font-semibold px-2 py-1 rounded text-xs transition"><i class="fas fa-cog mr-1"></i>Réglages</a>
-                </nav>
-            </div>
-        </header>
+        <x-header />
         <main class="flex-1 py-10 bg-gray-50">
             <div class="max-w-2xl mx-auto px-4">
                 <div class="flex items-center mb-8">

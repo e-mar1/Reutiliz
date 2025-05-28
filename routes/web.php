@@ -51,6 +51,11 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::put('annonces/{item}', [ItemController::class, 'update'])->name('annonces.update');
     Route::delete('annonces/{item}', [ItemController::class, 'destroy'])->name('annonces.destroy');
     Route::get('annonces/{item}', [ItemController::class, 'show'])->name('annonces.show');
+
+    // Reports CRUD
+    Route::get('reports', [\App\Http\Controllers\ReportController::class, 'index'])->name('reports.index');
+    Route::get('reports/{report}', [\App\Http\Controllers\ReportController::class, 'show'])->name('reports.show');
+    Route::delete('reports/{report}', [\App\Http\Controllers\ReportController::class, 'destroy'])->name('reports.destroy');
 });
 
 Route::get('/items/{item}', [ItemController::class, 'show'])->name('items.show');

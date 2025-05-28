@@ -20,7 +20,7 @@ return new class extends Migration
         $table->string('category');
         $table->boolean('is_free');
         $table->decimal('price', 8, 2)->nullable();
-        $table->string('image');
+        $table->string('image')->nullable();
         $table->timestamp('created_at')->useCurrent();
     });
 }
