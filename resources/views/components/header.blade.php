@@ -8,10 +8,10 @@
         <nav class="flex items-center space-x-2">
             @auth
                 @unless(Auth::user()->isAdmin())
-                    <a href="{{ route('login') }}" class="hidden sm:inline-flex items-center px-3 py-1 rounded-md text-xs font-medium text-white bg-blue-600 hover:bg-blue-700 transition"><i class="fas fa-plus-circle mr-1"></i>Publier</a>
+                    <a href="{{ route('publier') }}" class="hidden sm:inline-flex items-center px-3 py-1 rounded-md text-xs font-medium text-white bg-blue-600 hover:bg-blue-700 transition"><i class="fas fa-plus-circle mr-1"></i>Publier</a>
                 @endunless
             @else
-                <a href="{{ route('login') }}" class="hidden sm:inline-flex items-center px-3 py-1 rounded-md text-xs font-medium text-white bg-blue-600 hover:bg-blue-700 transition"><i class="fas fa-plus-circle mr-1"></i>Publier</a>
+                <a href="{{ route('publier') }}" class="hidden sm:inline-flex items-center px-3 py-1 rounded-md text-xs font-medium text-white bg-blue-600 hover:bg-blue-700 transition"><i class="fas fa-plus-circle mr-1"></i>Publier</a>
             @endauth
             @auth
                 <div x-data="{ open: false }" class="relative">
@@ -85,10 +85,10 @@
         <div class="px-4 py-3 space-y-2">
             @auth
                 @unless(Auth::user()->isAdmin())
-                    <a href="{{ route('login') }}" class="block px-3 py-1 rounded-md text-xs font-medium text-white bg-blue-600 hover:bg-blue-700"><i class="fas fa-plus-circle mr-1"></i>Publier une annonce</a>
+                    <a href="{{ route('publier') }}" class="block px-3 py-1 rounded-md text-xs font-medium text-white bg-blue-600 hover:bg-blue-700"><i class="fas fa-plus-circle mr-1"></i>Publier une annonce</a>
                 @endunless
             @else
-                <a href="{{ route('login') }}" class="block px-3 py-1 rounded-md text-xs font-medium text-white bg-blue-600 hover:bg-blue-700"><i class="fas fa-plus-circle mr-1"></i>Publier une annonce</a>
+                <a href="{{ route('publier') }}" class="block px-3 py-1 rounded-md text-xs font-medium text-white bg-blue-600 hover:bg-blue-700"><i class="fas fa-plus-circle mr-1"></i>Publier une annonce</a>
             @endauth
             @auth
                  @if(Auth::user()->isAdmin()) {{-- Assuming you have an isAdmin method on User model --}}

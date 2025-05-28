@@ -28,7 +28,7 @@ Route::get('/category/{category}', [ItemController::class, 'category'])->name('c
 Route::get('/items/create', [ItemController::class, 'create'])->name('items.create');
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/user/annonces', [UserController::class, 'getUserAnnonces'])->name('user.annonces');
+    Route::get('/user/annonces', [App\Http\Controllers\UserItemController::class, 'userAnnonces'])->name('user.annonces');
     Route::get('/user/favorites', [UserController::class, 'getUserFavorites'])->name('user.favorites');
     Route::get('/user/orders', [UserController::class, 'getUserOrders'])->name('user.orders');
 });
@@ -61,3 +61,4 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 Route::get('/items/{item}', [ItemController::class, 'show'])->name('items.show');
 Route::post('/items/{item}/report', [ItemController::class, 'report'])->name('items.report');
 Route::post('/items/{item}/contact', [ItemController::class, 'contact'])->name('items.contact');
+Route::match(['get', 'post'], '/publier', [\App\Http\Controllers\UserItemController::class, 'publier'])->name('publier');
