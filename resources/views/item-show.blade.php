@@ -43,20 +43,30 @@
                         <p class="text-gray-700 text-base mb-2">{{ $item->description }}</p>
                         
                         <div class="flex items-center gap-4 mb-4">
-                            <span class="text-xl font-bold text-blue-600">{{ $item->is_free ? 'Gratuit' : number_format($item->price, 2, ',', ' ') . ' €' }}</span>
+                            <span class="text-xl font-bold text-blue-600">{{ $item->is_free ? 'Gratuit' : number_format($item->price, 2, ',', ' ') . ' DH' }}</span>
                         </div>
                         <div x-data="{ showPhoneModal: false }">
                             <div class="flex gap-2 mb-4">
                                 <button 
-                                    class="flex-1 text-sm py-2 rounded bg-blue-600 hover:bg-blue-700 text-white font-semibold transition"
+                                    class="flex-1 text-sm py-4 rounded bg-blue-600 hover:bg-blue-700 text-white font-semibold transition h-full"
                                     @click="showPhoneModal = true"
                                     type="button"
                                 >
                                     <i class="fas fa-phone fa-lg mr-2"></i>Contacter le Vendeur
                                 </button>
-                                <button class="flex-1 text-sm py-2 rounded bg-pink-100 hover:bg-pink-200 text-pink-600 font-semibold transition">
-                                    <i class="fas fa-heart fa-lg mr-1"></i>Favori
+                        @auth    
+                            <form action="{{ route('favorites.toggle', $item->id) }}" method="POST" class="flex-1 text-sm rounded bg-pink-100 hover:bg-pink-200 transition h-full">
+                                @csrf
+                                <button class="w-full h-full flex items-center justify-center text-pink-600 py-4 font-semibold rounded">
+                                    <i class="fas fa-heart fa-lg mr-2"></i>Favori
                                 </button>
+                            </form>
+                        @else
+                        <div class="flex-1 text-sm rounded bg-pink-100 hover:bg-pink-200 transition h-full">
+                            <a href="{{ route('login') }}" class="w-full h-full flex items-center justify-center text-pink-600 py-4 font-semibold rounded">
+                                <i class="fas fa-heart fa-lg mr-2"></i>Favori
+                            </a></div>
+                        @endauth
                             </div>
 
                             <!-- Modal -->

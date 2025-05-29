@@ -94,10 +94,19 @@
                                     <p class="text-xs text-gray-500 mb-2 flex items-center"><i class="fas fa-map-marker-alt mr-1 text-gray-400"></i>{{ $item->city ?: 'Ville non spécifiée' }}</p>
                                     <p class="text-gray-600 text-xs mb-3 flex-grow">{{ Str::limit($item->description, 60) }}</p>
                                     <div class="mt-auto flex flex-col gap-2">
-                                        <span class="text-lg font-bold text-blue-600">{{ $item->is_free ? 'Gratuit' : number_format($item->price, 2, ',', ' ') . ' €' }}</span>
+                                        <span class="text-lg font-bold text-blue-600">{{ $item->is_free ? 'Gratuit' : number_format($item->price, 2, ',', ' ') . ' DH' }}</span>
                                         <div class="flex gap-2">
-                                            <button onclick="window.location='{{ route('items.show', $item->id) }}'" class="flex-1 btn-primary-solid text-xs py-2"><i class="fas fa-shopping-cart mr-1"></i>Acheter</button>
-                                            <button class="flex-1 btn-secondary-outline text-xs py-2"><i class="fas fa-heart mr-1"></i>Favori</button>
+                                            <button onclick="window.location='{{ route('items.show', $item->id) }}'" class="flex-1 btn-primary-solid text-xs py-2 mb-3"><i class="fas fa-shopping-cart mr-1"></i>Acheter</button>
+                                            @auth
+                                                <form action="{{ route('favorites.toggle', $item->id) }}" method="POST" class="flex-1">
+                                                    @csrf
+                                                    <button type="submit" class="w-full {{ Auth::user()->favorites->contains('item_id', $item->id) ? 'btn-danger-solid' : 'btn-secondary-outline' }} text-xs py-2">
+                                                        <i class="fas fa-heart mr-1"></i>{{ Auth::user()->favorites->contains('item_id', $item->id) ? 'Retirer' : 'Favori' }}
+                                                    </button>
+                                                </form>
+                                            @else
+                                                <a href="{{ route('login') }}" class="flex-1 btn-secondary-outline text-xs py-2 text-center"><i class="fas fa-heart mr-1"></i>Favori</a>
+                                            @endauth
                                         </div>
                                     </div>
                                 </div>

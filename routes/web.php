@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\FavoriteController;
 
 Route::get('/', [ItemController::class, 'index'])->name('welcome');
 
@@ -62,3 +63,7 @@ Route::get('/items/{item}', [ItemController::class, 'show'])->name('items.show')
 Route::post('/items/{item}/report', [ItemController::class, 'report'])->name('items.report');
 Route::post('/items/{item}/contact', [ItemController::class, 'contact'])->name('items.contact');
 Route::match(['get', 'post'], '/publier', [\App\Http\Controllers\UserItemController::class, 'publier'])->name('publier');
+
+// Favorites
+Route::get('/favorites', [FavoriteController::class, 'index'])->name('user.favorites');
+Route::post('/favorites/{itemId}', [FavoriteController::class, 'toggle'])->name('favorites.toggle');

@@ -15,22 +15,22 @@ class DatabaseSeeder extends Seeder{
     public function run(): void
     {
         // Créer 10 utilisateurs
-        User::factory(10)->create();
+       //  User::factory(10)->create();
 
         // Créer 20 items
-        Item::factory(20)->create();
+       // Item::factory(20)->create();
 
         // Créer 10 rapports
-        Report::factory(10)->create();
+       // Report::factory(10)->create();
 
         // Créer 20 favoris
-        Favorite::factory(20)->create();
+      //  Favorite::factory(20)->create();
 
         // Créer 15 commentaires
-        Comment::factory(15)->create();
+       // Comment::factory(15)->create();
 
         // Créer 10 ordres
-        Order::factory(10)->create();
+       // Order::factory(10)->create();
 
         // Créer un utilisateur administrateur
         $adminUser = User::create([
