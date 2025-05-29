@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Report;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Favorite;
+use Illuminate\Http\RedirectResponse;
 
 class ItemController extends Controller
 {
@@ -226,15 +228,23 @@ class ItemController extends Controller
      */
     public function report(Request $request, Item $item)
     {
-        // You can expand this to accept a reason from the form if needed
-        $reason = 'Signalement utilisateur';
-        $userId = Auth::id();
+        // Validation des données du formulaire
+        $validated = $request->validate([
+            'reason' => 'required|string',
+            'description' => 'required|string',
+            'reporter_email' => 'nullable|email',
+        ]);
+        
+        $userId = Auth::id() ?? null; // Utilisateur connecté ou null si invité
         Report::create([
             'user_id' => $userId,
             'item_id' => $item->id,
-            'reason' => $reason,
+            'reason' => $validated['reason'],
+            'description' => $validated['description'],
+            'reporter_email' => $validated['reporter_email'] ?? null,
             'date' => now(),
         ]);
+        
         return back()->with('success', 'Merci, votre signalement a été pris en compte.');
     }
     public function contact(Request $request, $itemId)

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Report extends Model
 {
     use HasFactory;
-    protected $fillable = ['user_id', 'item_id', 'reason', 'date'];
+    protected $fillable = ['user_id', 'item_id', 'reason', 'description', 'reporter_email', 'date'];
     public $timestamps = false;
 
     public function user()
@@ -21,4 +21,3 @@ class Report extends Model
         return $this->belongsTo(Item::class);
     }
 }
-

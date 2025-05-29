@@ -60,8 +60,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 });
 
 Route::get('/items/{item}', [ItemController::class, 'show'])->name('items.show');
-Route::post('/items/{item}/report', [ItemController::class, 'report'])->name('items.report');
-Route::post('/items/{item}/contact', [ItemController::class, 'contact'])->name('items.contact');
+Route::middleware(['auth'])->group(function () {
+    Route::post('/items/{item}/report', [ItemController::class, 'report'])->name('items.report');
+    Route::post('/items/{item}/contact', [ItemController::class, 'contact'])->name('items.contact');
+});
 Route::match(['get', 'post'], '/publier', [\App\Http\Controllers\UserItemController::class, 'publier'])->name('publier');
 
 // Favorites

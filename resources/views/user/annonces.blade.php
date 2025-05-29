@@ -10,7 +10,8 @@
         <div class="mb-4 p-3 rounded bg-green-100 text-green-800">{{ session('success') }}</div>
     @endif
     @if($items->isEmpty())
-        <div class="text-gray-500 text-center py-8">Vous n'avez publié aucune annonce pour le moment.</div>
+        <br>
+        <div class="text-gray-500 text-center py-12">Vous n'avez publié aucune annonce pour le moment.</div>
     @else
     <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200">

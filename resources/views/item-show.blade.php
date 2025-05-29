@@ -23,12 +23,66 @@
                 <div class="max-w-7xl mx-auto px-4 bg-white rounded-xl shadow p-6 md:p-10 flex flex-col md:flex-row gap-8">
                     <div class="md:w-1/2 flex flex-col items-center relative">
                         <img src="{{ asset('storage/'.$item->image) }}" alt="{{ $item->title }}" class="rounded-xl w-full object-cover object-center mb-4 max-h-96">
-                        <form method="POST" action="{{ route('items.report', $item->id) }}" class="absolute left-0 bottom-3 m-4">
-                            @csrf
-                            <button type="submit" class="btn-secondary-outline text-sm py-2 text-red-600 border-red-400 bg-red-50 flex items-center justify-center px-3 rounded">
+                       
+                            <div x-data="{ showReportModal: false }" class="absolute left-0 bottom-3 m-4">
+                            @auth
+                            <button 
+                                @click="showReportModal = true"
+                                type="button"
+                                class="btn-secondary-outline text-sm py-2 text-red-600 border-red-400 bg-red-50 flex items-center justify-center px-3 rounded"
+                            >
                                 <i class="fas fa-flag fa-lg mr-1"></i>Signaler
                             </button>
-                        </form>
+                            
+                            <!-- Modal de signalement -->
+                           <div
+                                x-show="showReportModal"
+                                style="background: rgba(0,0,0,0.4)"
+                                class="fixed inset-0 font- flex items-center justify-center z-50"
+                            >
+                                <div class="bg-white rounded-xl shadow-lg max-w-md w-full p-8 relative">
+                                    <button
+                                        class="absolute top-3 right-3 text-gray-400 hover:text-gray-700 text-2xl"
+                                        @click="showReportModal = false"
+                                    >×</button>
+                                    <h2 class="text-lg font-semibold mb-4 text-red-600 flex items-center"><i class="fas fa-flag mr-2"></i>Signaler cette annonce</h2>
+                                    <form method="POST" action="{{ route('items.report', $item->id) }}">
+                                        @csrf
+                                        <div class="mb-3">
+                                            <label class="block text-sm font-medium mb-1">Raison du signalement</label>
+                                            <select name="reason" required class="w-full border rounded px-3 py-2">
+                                                <option value="">Sélectionnez une raison</option>
+                                                <option value="fraudulent">Annonce frauduleuse</option>
+                                                <option value="inappropriate">Contenu inapproprié</option>
+                                                <option value="duplicate">Annonce en double</option>
+                                                <option value="wrong_category">Mauvaise catégorie</option>
+                                                <option value="other">Autre raison</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="block text-sm font-medium mb-1">Description du problème</label>
+                                            <textarea name="description" required class="w-full border rounded px-3 py-2" rows="4" placeholder="Veuillez décrire le problème en détail"></textarea>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="block text-sm font-medium mb-1">Votre email (facultatif)</label>
+                                            <input type="email" name="reporter_email" class="w-full border rounded px-3 py-2" placeholder="Votre email pour le suivi">
+                                        </div>
+                                        <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-2 rounded mt-2">
+                                            Envoyer le signalement
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                                @else
+                                <button 
+                                    @click="window.location.href='{{ route('login') }}'"
+                                    type="button"
+                                    class="btn-secondary-outline text-sm py-2 text-red-600 border-red-400 bg-red-50 flex items-center justify-center px-3 rounded"
+                                >
+                                    <i class="fas fa-flag fa-lg mr-1"></i>Signaler 
+                                </button>
+                                @endauth
+                        </div>
                     </div>
                     <div class="md:w-1/2 flex flex-col gap-4">
                     <div class="flex items-center gap-4 mb-2">

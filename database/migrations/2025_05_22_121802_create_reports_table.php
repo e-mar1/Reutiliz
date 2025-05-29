@@ -16,7 +16,10 @@ return new class extends Migration
             $table->foreignId('item_id')->constrained('items')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->text('reason');
+            $table->text('description')->nullable();
+            $table->string('reporter_email')->nullable();
             $table->timestamp('date')->useCurrent();
+            $table->string('image')->nullable();
         });
     }
 

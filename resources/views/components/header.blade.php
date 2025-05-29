@@ -38,9 +38,6 @@
                             <a href="{{ route('user.annonces') }}" class="flex items-center gap-2 px-4 py-2 text-xs text-gray-700 hover:bg-blue-50">
                                 <i class="fas fa-bullhorn"></i> Mes annonces
                             </a>
-                            <a href="{{ route('user.orders') }}" class="flex items-center gap-2 px-4 py-2 text-xs text-gray-700 hover:bg-blue-50">
-                                <i class="fas fa-shopping-cart"></i> Mes commandes
-                            </a>
                             <a href="{{ route('user.favorites') }}" class="flex items-center gap-2 px-4 py-2 text-xs text-gray-700 hover:bg-blue-50">
                                 <i class="fas fa-heart"></i> Mes favoris
                             </a>
