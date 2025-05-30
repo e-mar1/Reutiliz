@@ -9,6 +9,10 @@ use App\Models\Report;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Favorite;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\MessageVerification;
+use App\Models\PendingMessage;
 
 class ItemController extends Controller
 {
@@ -247,22 +251,68 @@ class ItemController extends Controller
         
         return back()->with('success', 'Merci, votre signalement a été pris en compte.');
     }
+
     public function contact(Request $request, $itemId)
-{
-    $request->validate([
-        'from' => 'required|email',
-        'to' => 'required|email',
-        'subject' => 'required|string|max:255',
-        'description' => 'required|string',
-    ]);
+    {
+        $request->validate([
+            'from' => 'required|email',
+            'to' => 'required|email',
+            'subject' => 'required|string|max:255',
+            'description' => 'required|string',
+        ]);
 
-    // Send email logic (example using Laravel's Mail)
-    \Mail::raw($request->description, function ($message) use ($request) {
-        $message->to($request->to)
-                ->from($request->from)
-                ->subject($request->subject);
-    });
+        // Generate verification token
+        $token = Str::random(64);
+        
+        // Store message in pending_messages table
+        $pendingMessage = PendingMessage::create([
+            'from' => $request->from,
+            'to' => $request->to,
+            'subject' => $request->subject,
+            'description' => $request->description,
+            'verification_token' => $token,
+            'expires_at' => now()->addHours(24),
+        ]);
 
-    return back()->with('success', 'Votre message a été envoyé au vendeur.');
-}
+        // Generate verification URL
+        $verificationUrl = route('message.verify', ['token' => $token]);
+
+        // Send verification email
+        Mail::to($request->from)->send(new MessageVerification(
+            $verificationUrl,
+            [
+                'to' => $request->to,
+                'subject' => $request->subject
+            ]
+        ));
+
+        return back()->with('success', 'Un email de vérification a été envoyé à votre adresse email. Veuillez cliquer sur le lien dans l\'email pour confirmer l\'envoi de votre message.');
+    }
+
+    public function verifyMessage($token)
+    {
+        $pendingMessage = PendingMessage::where('verification_token', $token)
+            ->where('expires_at', '>', now())
+            ->where('is_verified', false)
+            ->first();
+
+        if (!$pendingMessage) {
+            return redirect()->route('welcome')->with('error', 'Lien de vérification invalide ou expiré.');
+        }
+
+        // Mark message as verified
+        $pendingMessage->update(['is_verified' => true]);
+
+        // Send the actual message
+        Mail::raw($pendingMessage->description, function ($message) use ($pendingMessage) {
+            $message->to($pendingMessage->to)
+                    ->from($pendingMessage->from)
+                    ->subject($pendingMessage->subject);
+        });
+
+        // Delete the pending message
+        $pendingMessage->delete();
+
+        return redirect()->route('welcome')->with('success', 'Votre message a été envoyé avec succès.');
+    }
 }

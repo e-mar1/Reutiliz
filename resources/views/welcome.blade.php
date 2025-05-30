@@ -16,6 +16,21 @@
 <body class="antialiased">
     <div x-data="{ mobileMenuOpen: false }">
         <x-header />
+        <!-- Flash Messages -->
+        @if(session('success'))
+            <div class="max-w-7xl mx-auto px-4 mt-4">
+                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+                    <span class="block sm:inline">{{ session('success') }}</span>
+                </div>
+            </div>
+        @endif
+        @if(session('error'))
+            <div class="max-w-7xl mx-auto px-4 mt-4">
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                    <span class="block sm:inline">{{ session('error') }}</span>
+                </div>
+            </div>
+        @endif
         <!-- Main Content -->
         <main class="py-8">
             <div class="container mx-auto px-4">
@@ -32,10 +47,10 @@
                     </div>
                 </section>
                 @endif
-            
-            
-            
-                
+
+
+
+
 <section aria-labelledby="filter-heading" class="bg-white p-4 md:p-6 rounded-xl shadow mb-8 max-w-7xl mx-auto">
     <form action="{{ route('welcome') }}" method="GET">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
@@ -115,7 +130,7 @@
                     </div>
                     <!-- Pagination -->
                     <nav aria-label="Pagination" class="mt-8 flex items-center justify-center">
-                        {{ $items->appends(request()->query())->links('vendor.pagination.tailwind') }} 
+                        {{ $items->appends(request()->query())->links('vendor.pagination.tailwind') }}
                     </nav>
                 @else
                     <div class="text-center py-16 bg-white rounded-xl shadow">

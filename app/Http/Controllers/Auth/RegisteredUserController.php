@@ -47,6 +47,6 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect(route('welcome', absolute: false));
+        return redirect()->route('verification.notice')->with('status', 'Un lien de vérification a été envoyé à votre adresse e-mail.');
     }
 }
