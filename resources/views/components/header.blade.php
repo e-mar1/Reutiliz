@@ -4,7 +4,7 @@
             <i class="fas fa-recycle"></i>
             <span>Reutiliz</span>
         </a>
-        
+
         <nav class="flex items-center space-x-2">
             @auth
                 @unless(Auth::user()->isAdmin())
@@ -32,8 +32,8 @@
                                 <i class="fas fa-users"></i> Utilisateurs (Admin)
                             </a>
                         @else
-                            <a href="{{ route('dashboard') }}" class="flex items-center gap-2 px-4 py-2 text-xs text-gray-700 hover:bg-blue-50">
-                                <i class="fas fa-tachometer-alt"></i> Mon Tableau de bord
+                            <a href="{{ route('welcome') }}" class="flex items-center gap-2 px-4 py-2 text-xs text-gray-700 hover:bg-blue-50">
+                                <i class="fas fa-tachometer-alt"></i> Accueil
                             </a>
                             <a href="{{ route('user.annonces') }}" class="flex items-center gap-2 px-4 py-2 text-xs text-gray-700 hover:bg-blue-50">
                                 <i class="fas fa-bullhorn"></i> Mes annonces
@@ -71,7 +71,7 @@
     </div>
 
     <!-- Mobile Menu -->
-    <div x-show="mobileMenuOpen" @click.away="mobileMenuOpen = false" 
+    <div x-show="mobileMenuOpen" @click.away="mobileMenuOpen = false"
          x-transition:enter="transition ease-out duration-200"
          x-transition:enter-start="opacity-0 scale-95"
          x-transition:enter-end="opacity-100 scale-100"

@@ -39,7 +39,7 @@ class UserItemController extends Controller
             $validated['image'] = $request->file('image')->store('annonces', 'public');
         }
         Item::create($validated);
-        return redirect()->route('dashboard')->with('success', 'Annonce publiée avec succès.');
+        return redirect()->route('welcome')->with('success', 'Annonce publiée avec succès.');
     }
 
     public function userAnnonces()

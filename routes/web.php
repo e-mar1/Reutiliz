@@ -28,7 +28,7 @@ Route::get('/category/{category}', [ItemController::class, 'category'])->name('c
 
 Route::get('/items/create', [ItemController::class, 'create'])->name('items.create');
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/user/annonces', [App\Http\Controllers\UserItemController::class, 'userAnnonces'])->name('user.annonces');
     Route::get('/user/favorites', [UserController::class, 'getUserFavorites'])->name('user.favorites');
     Route::get('/user/orders', [UserController::class, 'getUserOrders'])->name('user.orders');
@@ -69,3 +69,5 @@ Route::match(['get', 'post'], '/publier', [\App\Http\Controllers\UserItemControl
 // Favorites
 Route::get('/favorites', [FavoriteController::class, 'index'])->name('user.favorites');
 Route::post('/favorites/{itemId}', [FavoriteController::class, 'toggle'])->name('favorites.toggle');
+
+Route::get('/message/verify/{token}', [ItemController::class, 'verifyMessage'])->name('message.verify');
