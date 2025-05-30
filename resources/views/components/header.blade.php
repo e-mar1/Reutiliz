@@ -32,14 +32,19 @@
                                 <i class="fas fa-users"></i> Utilisateurs (Admin)
                             </a>
                         @else
-                            <a href="{{ route('dashboard') }}" class="flex items-center gap-2 px-4 py-2 text-xs text-gray-700 hover:bg-blue-50">
-                                <i class="fas fa-tachometer-alt"></i> Mon Tableau de bord
+                            <a href="{{ route('welcome') }}" class="flex items-center gap-2 px-4 py-2 text-xs text-gray-700 hover:bg-blue-50">
+                                <i class="fas fa-home"></i> Accueil
                             </a>
                             <a href="{{ route('user.annonces') }}" class="flex items-center gap-2 px-4 py-2 text-xs text-gray-700 hover:bg-blue-50">
                                 <i class="fas fa-bullhorn"></i> Mes annonces
                             </a>
                             <a href="{{ route('user.favorites') }}" class="flex items-center gap-2 px-4 py-2 text-xs text-gray-700 hover:bg-blue-50">
                                 <i class="fas fa-heart"></i> Mes favoris
+                            </a>
+                        @endif
+                        @if (!Auth::user()->hasVerifiedEmail())
+                            <a href="{{ route('verification.notice') }}" class="flex items-center gap-2 px-4 py-2 text-xs text-red-600 hover:bg-red-50">
+                                <i class="fas fa-exclamation-triangle"></i> Vérifier l'e-mail
                             </a>
                         @endif
                         <a href="{{ route('profile.edit') }}" class="flex items-center gap-2 px-4 py-2 text-xs text-gray-700 hover:bg-blue-50">
@@ -93,6 +98,11 @@
                  @else
                     <a href="{{ route('dashboard') }}" class="block px-3 py-1 rounded-md text-xs font-medium text-gray-700 hover:bg-gray-50 hover:text-blue-600">Mon Tableau de bord</a>
                  @endif
+                @if (!Auth::user()->hasVerifiedEmail())
+                    <a href="{{ route('verification.notice') }}" class="block px-3 py-1 rounded-md text-xs font-medium text-red-600 hover:bg-red-50 hover:text-red-700">
+                        <i class="fas fa-exclamation-triangle mr-1"></i> Vérifier l'e-mail
+                    </a>
+                @endif
                 <form method="POST" action="{{ route('logout') }}" class="block">
                     @csrf
                     <button type="submit" class="w-full text-left block px-3 py-1 rounded-md text-xs font-medium text-gray-700 hover:bg-gray-50 hover:text-blue-600"><i class="fas fa-sign-out-alt mr-1"></i>Déconnexion</button>
