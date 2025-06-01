@@ -48,11 +48,11 @@
                         </div>
                         <div class="bg-white rounded-xl shadow p-6 flex items-center gap-4">
                             <div class="bg-yellow-100 text-yellow-600 rounded-full p-3">
-                                <i class="fas fa-shopping-cart fa-lg"></i>
+                                <i class="fas fa-comment fa-lg"></i>
                             </div>
                             <div>
-                                <div class="text-2xl font-bold">{{ $ordersCount ?? '...' }}</div>
-                                <div class="text-xs text-gray-500">Commandes</div>
+                                <div class="text-2xl font-bold">{{ $commentsCount ?? '...' }}</div>
+                                <div class="text-xs text-gray-500">Comments</div>
                             </div>
                         </div>
                         <div class="bg-white rounded-xl shadow p-6 flex items-center gap-4">
@@ -89,9 +89,9 @@
                             </div>
                         </div>
                         <div class="bg-white rounded-xl shadow p-2 overflow-x-auto">
-                            <h3 class="text-base font-semibold mb-2 flex items-center"><i class="fas fa-shopping-cart text-yellow-400 mr-2"></i>Commandes</h3>
+                            <h3 class="text-base font-semibold mb-2 flex items-center"><i class="fas fa-comment text-yellow-400 mr-2"></i>Comments</h3>
                             <div style="min-width: 350px; max-width: 100%;">
-                                <canvas id="ordersChart" height="160"></canvas>
+                                <canvas id="commentsChart" height="160"></canvas>
                             </div>
                         </div>
                     </div>
@@ -123,35 +123,37 @@
                         </div>
                     </div>
 
-                    <!-- Recent Orders Section -->
+                    <!-- Recent Comments Section -->
                     <div class="bg-white rounded-xl shadow p-6 mb-6">
-                        <h3 class="text-lg font-semibold mb-4 flex items-center"><i class="fas fa-shopping-cart text-yellow-400 mr-2"></i>Dernières commandes</h3>
+                        <h3 class="text-lg font-semibold mb-4 flex items-center"><i class="fas fa-comments text-blue-400 mr-2"></i>Derniers commentaires</h3>
                         <div class="overflow-x-auto">
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
                                     <tr>
-                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Commande</th>
-                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Utilisateur</th>
                                         <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Annonce</th>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Utilisateur</th>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Commentaire</th>
                                         <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
-                                    @forelse($recentOrders as $order)
+                                    @forelse($recentComments as $comment)
                                         <tr>
-                                            <td class="px-4 py-2 text-sm text-gray-900">#{{ $order->id }}</td>
-                                            <td class="px-4 py-2 text-sm text-gray-900">{{ $order->user->name ?? '-' }}</td>
-                                            <td class="px-4 py-2 text-sm text-gray-900">{{ $order->item->title ?? '-' }}</td>
-                                            <td class="px-4 py-2 text-sm text-gray-900">{{ $order->created_at->format('d/m/Y H:i') }}</td>
+                                            <td class="px-4 py-2 text-sm text-gray-900">{{ $comment->item->title ?? '-' }}</td>
+                                            <td class="px-4 py-2 text-sm text-gray-900">{{ $comment->user->name ?? '-' }}</td>
+                                            <td class="px-4 py-2 text-sm text-gray-900">{{ Str::limit($comment->content, 50) }}</td>
+                                            <td class="px-4 py-2 text-sm text-gray-900">
+                                                {{ $comment->created_at ? (\Carbon\Carbon::parse($comment->created_at)->format('d/m/Y H:i')) : '-' }}
+                                            </td>
                                         </tr>
                                     @empty
-                                        <tr><td colspan="4" class="px-4 py-2 text-gray-500">Aucune commande récente.</td></tr>
+                                        <tr><td colspan="4" class="px-4 py-2 text-gray-500">Aucun commentaire récent.</td></tr>
                                     @endforelse
                                 </tbody>
                             </table>
                         </div>
                     </div>
-
+                   
                     <!-- Recent Users Section -->
                     <div class="bg-white rounded-xl shadow p-6 mb-6">
                         <h3 class="text-lg font-semibold mb-4 flex items-center"><i class="fas fa-users text-blue-400 mr-2"></i>Nouveaux utilisateurs</h3>
@@ -213,66 +215,7 @@
         </main>
         <!-- Footer -->
         
-<footer class="bg-gray-900 text-gray-300 mt-10">
-    <div class="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
-        <div class="flex flex-col md:flex-row md:justify-between md:items-start gap-8">
-            <!-- Logo and Description -->
-            <div class="flex-1 mb-6 md:mb-0">
-                <a href="{{ route('welcome') }}" class="flex items-center space-x-2 text-2xl font-bold text-white mb-2">
-                    <i class="fas fa-recycle"></i>
-                    <span>Reutiliz</span>
-                </a>
-                <p class="text-gray-400 text-sm max-w-xs">La plateforme pour donner une seconde vie à vos objets et trouver des trésors près de chez vous.</p>
-            </div>
-            <!-- Navigation Links -->
-            <div class="flex-1 grid grid-cols-2 sm:grid-cols-4 gap-6 text-sm">
-                <div>
-                    <h3 class="text-gray-200 font-semibold mb-2 uppercase text-xs tracking-wider">Solutions</h3>
-                    <ul class="space-y-1">
-                        <li><a href="#" class="hover:text-white transition">Vendre</a></li>
-                        <li><a href="#" class="hover:text-white transition">Acheter</a></li>
-                        <li><a href="#" class="hover:text-white transition">Échanger</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 class="text-gray-200 font-semibold mb-2 uppercase text-xs tracking-wider">Support</h3>
-                    <ul class="space-y-1">
-                        <li><a href="#" class="hover:text-white transition">FAQ</a></li>
-                        <li><a href="#" class="hover:text-white transition">Contactez-nous</a></li>
-                        <li><a href="#" class="hover:text-white transition">Sécurité</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 class="text-gray-200 font-semibold mb-2 uppercase text-xs tracking-wider">Entreprise</h3>
-                    <ul class="space-y-1">
-                        <li><a href="#" class="hover:text-white transition">À propos</a></li>
-                        <li><a href="#" class="hover:text-white transition">Carrières</a></li>
-                        <li><a href="#" class="hover:text-white transition">Presse</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 class="text-gray-200 font-semibold mb-2 uppercase text-xs tracking-wider">Légal</h3>
-                    <ul class="space-y-1">
-                        <li><a href="#" class="hover:text-white transition">Confidentialité</a></li>
-                        <li><a href="#" class="hover:text-white transition">Conditions</a></li>
-                    </ul>
-                </div>
-            </div>
-            <!-- Social Media -->
-            <div class="flex-1 flex md:justify-end items-start">
-                <div class="flex space-x-4">
-                    <a href="#" class="hover:text-blue-400 transition"><i class="fab fa-facebook-f fa-lg"></i></a>
-                    <a href="#" class="hover:text-pink-400 transition"><i class="fab fa-instagram fa-lg"></i></a>
-                    <a href="#" class="hover:text-blue-300 transition"><i class="fab fa-twitter fa-lg"></i></a>
-                </div>
-            </div>
-        </div>
-        <div class="mt-10 border-t border-gray-700 pt-6 text-center text-xs text-gray-400">
-            &copy; {{ date('Y') }} Reutiliz. Tous droits réservés.
-        </div>
-    </div>
-</footer>
-
+<x-footer/>
     </div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -293,24 +236,24 @@
     const itemsByDay = @json($itemsByDay);
     const itemsByMonth = @json($itemsByMonth);
     const itemsByYear = @json($itemsByYear);
-    // Orders Chart Data
-    const ordersByDay = @json($ordersByDay);
-    const ordersByMonth = @json($ordersByMonth);
-    const ordersByYear = @json($ordersByYear);
+    // comments Chart Data
+    const commentsByDay = @json($commentsByDay);
+    const commentsByMonth = @json($commentsByMonth);
+    const commentsByYear = @json($commentsByYear);
     // Reports Chart Data
     const reportsByDay = @json($reportsByDay);
     const reportsByMonth = @json($reportsByMonth);
     const reportsByYear = @json($reportsByYear);
 
     // Modern Chart.js config for each chart
-    function createModernChart(ctx, datasets, title, colors) {
+    function createModernChart(ctx, dataset, title, colors) {
         // Create gradient for the main dataset
         const gradient = ctx.createLinearGradient(0, 0, 0, 300);
         gradient.addColorStop(0, colors.gradientFrom);
         gradient.addColorStop(1, colors.gradientTo);
 
         // Show all labels (no slicing)
-        const labels = datasets[0].labels;
+        const labels = dataset.labels;
 
         return new Chart(ctx, {
             type: 'line',
@@ -319,7 +262,7 @@
                 datasets: [
                     {
                         label: 'Par jour',
-                        data: datasets[0].data,
+                        data: dataset.data,
                         borderColor: colors.line,
                         backgroundColor: gradient,
                         fill: true,
@@ -336,32 +279,6 @@
                         shadowOffsetY: 4,
                         shadowBlur: 10,
                         shadowColor: colors.shadow,
-                    },
-                    {
-                        label: 'Par mois',
-                        data: datasets[1].data,
-                        borderColor: colors.month,
-                        backgroundColor: 'rgba(0,0,0,0)',
-                        fill: false,
-                        tension: 0.5,
-                        pointRadius: 4,
-                        borderWidth: 2,
-                        segment: {
-                            borderCapStyle: 'round',
-                        },
-                    },
-                    {
-                        label: 'Par année',
-                        data: datasets[2].data,
-                        borderColor: colors.year,
-                        backgroundColor: 'rgba(0,0,0,0)',
-                        fill: false,
-                        tension: 0.5,
-                        pointRadius: 4,
-                        borderWidth: 2,
-                        segment: {
-                            borderCapStyle: 'round',
-                        },
                     }
                 ]
             },
@@ -448,68 +365,52 @@
 
     // Prepare data for each chart
     const usersDay = prepareChartData(usersByDay, 'date', 'count');
-    const usersMonth = prepareChartData(usersByMonth, 'month', 'count');
-    const usersYear = prepareChartData(usersByYear, 'year', 'count');
     const itemsDay = prepareChartData(itemsByDay, 'date', 'count');
-    const itemsMonth = prepareChartData(itemsByMonth, 'month', 'count');
-    const itemsYear = prepareChartData(itemsByYear, 'year', 'count');
-    const ordersDay = prepareChartData(ordersByDay, 'date', 'count');
-    const ordersMonth = prepareChartData(ordersByMonth, 'month', 'count');
-    const ordersYear = prepareChartData(ordersByYear, 'year', 'count');
+    const commentsDay = prepareChartData(commentsByDay, 'date', 'count');
     const reportsDay = prepareChartData(reportsByDay, 'date', 'count');
-    const reportsMonth = prepareChartData(reportsByMonth, 'month', 'count');
-    const reportsYear = prepareChartData(reportsByYear, 'year', 'count');
 
-    // Render modern charts
+    // Render modern charts (only 'par jour')
     createModernChart(
         document.getElementById('usersChart').getContext('2d'),
-        [usersDay, usersMonth, usersYear],
+        usersDay,
         'Utilisateurs inscrits',
         {
             line: '#3b82f6',
             gradientFrom: 'rgba(59,130,246,0.3)',
             gradientTo: 'rgba(59,130,246,0.05)',
-            month: '#10b981',
-            year: '#f59e42',
             shadow: 'rgba(59,130,246,0.15)'
         }
     );
     createModernChart(
         document.getElementById('itemsChart').getContext('2d'),
-        [itemsDay, itemsMonth, itemsYear],
+        itemsDay,
         'Annonces publiées',
         {
             line: '#10b981',
             gradientFrom: 'rgba(16,185,129,0.3)',
             gradientTo: 'rgba(16,185,129,0.05)',
-            month: '#3b82f6',
-            year: '#f59e42',
             shadow: 'rgba(16,185,129,0.15)'
         }
     );
     createModernChart(
-        document.getElementById('ordersChart').getContext('2d'),
-        [ordersDay, ordersMonth, ordersYear],
-        'Commandes',
+        document.getElementById('commentsChart').getContext('2d'),
+        commentsDay,
+        'Commentaires',
         {
             line: '#f59e42',
             gradientFrom: 'rgba(245,158,66,0.3)',
             gradientTo: 'rgba(245,158,66,0.05)',
-            month: '#3b82f6',
-            year: '#10b981',
             shadow: 'rgba(245,158,66,0.15)'
         }
     );
     createModernChart(
         document.getElementById('reportsChart').getContext('2d'),
-        [reportsDay, reportsMonth, reportsYear],
+        reportsDay,
         'Signalements',
         {
             line: '#ef4444',
             gradientFrom: 'rgba(239,68,68,0.3)',
             gradientTo: 'rgba(239,68,68,0.05)',
-            month: '#3b82f6',
-            year: '#10b981',
             shadow: 'rgba(239,68,68,0.15)'
         }
     );

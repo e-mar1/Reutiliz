@@ -50,7 +50,7 @@
                                 <p class="text-xs text-gray-500 mb-2 flex items-center"><i class="fas fa-map-marker-alt mr-1 text-gray-400"></i>{{ $favorite->item->city ?: 'Ville non spécifiée' }}</p>
                                 <p class="text-gray-600 text-xs mb-3 flex-grow">{{ Str::limit($favorite->item->description, 60) }}</p>
                                 <div class="mt-auto flex flex-col gap-2">
-                                    <span class="text-lg font-bold text-blue-600">{{ $favorite->item->is_free ? 'Gratuit' : number_format($favorite->item->price, 2, ',', ' ') . ' €' }}</span>
+                                    <span class="text-lg font-bold text-blue-600">{{ $favorite->item->is_free ? 'Gratuit' : number_format($favorite->item->price, 2, ',', ' ') . ' DH' }}</span>
                                     <div class="flex gap-2">
                                         <button class="flex-1 btn-primary-solid text-xs py-2"><i class="fas fa-shopping-cart mr-1"></i>Acheter</button>
                                         <form action="{{ route('favorites.toggle', $favorite->item->id) }}" method="POST" class="flex-1">

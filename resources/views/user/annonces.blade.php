@@ -29,7 +29,7 @@
                 <tr>
                     <td class="px-4 py-2 text-sm text-gray-900">{{ $item->title }}</td>
                     <td class="px-4 py-2 text-sm text-gray-900">{{ Str::limit($item->description, 40) }}</td>
-                    <td class="px-4 py-2 text-sm text-gray-900">{{ $item->is_free ? 'Gratuit' : number_format($item->price, 2, ',', ' ') . ' €' }}</td>
+                    <td class="px-4 py-2 text-sm text-gray-900">{{ $item->is_free ? 'Gratuit' : number_format($item->price, 2, ',', ' ') . ' DH' }}</td>
                     <td class="px-4 py-2 text-sm text-gray-900">{{ $item->city }}</td>
                     <td class="px-4 py-2 text-sm text-gray-900">{{ $item->created_at->format('d/m/Y H:i') }}</td>
                 </tr>

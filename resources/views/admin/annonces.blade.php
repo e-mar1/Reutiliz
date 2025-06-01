@@ -103,7 +103,7 @@
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $annonce->id }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $annonce->title }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $annonce->user->name ?? '' }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $annonce->price ? number_format($annonce->price, 2, ',', ' ') . ' €' : 'Gratuit' }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $annonce->price ? number_format($annonce->price, 2, ',', ' ') . ' DH' : 'Gratuit' }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $annonce->status }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             <a href="{{ route('admin.annonces.edit', $annonce->id) }}" class="text-blue-600 hover:text-blue-900 mr-2"><i class="fas fa-edit"></i></a>
