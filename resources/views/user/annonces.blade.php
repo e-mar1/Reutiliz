@@ -22,6 +22,7 @@
                     <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Prix</th>
                     <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ville</th>
                     <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
@@ -32,6 +33,13 @@
                     <td class="px-4 py-2 text-sm text-gray-900">{{ $item->is_free ? 'Gratuit' : number_format($item->price, 2, ',', ' ') . ' DH' }}</td>
                     <td class="px-4 py-2 text-sm text-gray-900">{{ $item->city }}</td>
                     <td class="px-4 py-2 text-sm text-gray-900">{{ $item->created_at->format('d/m/Y H:i') }}</td>
+                    <td class="px-4 py-2 text-sm font-medium">
+                        <form action="{{ route('user.annonces.destroy', $item->id) }}" method="POST" class="inline" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette annonce ?')">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="text-red-600 hover:text-red-900"><i class="fas fa-trash"></i></button>
+                        </form>
+                    </td>
                 </tr>
                 @endforeach
             </tbody>

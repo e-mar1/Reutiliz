@@ -8,6 +8,8 @@ use App\Http\Controllers\ItemController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\UserItemController;
 
 Route::get('/', [ItemController::class, 'index'])->name('welcome');
 
@@ -31,6 +33,7 @@ Route::get('/items/create', [ItemController::class, 'create'])->name('items.crea
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/user/annonces', [App\Http\Controllers\UserItemController::class, 'userAnnonces'])->name('user.annonces');
+    Route::delete('/user/annonces/{id}', [App\Http\Controllers\UserItemController::class, 'destroy'])->name('user.annonces.destroy');
     Route::get('/user/favorites', [UserController::class, 'getUserFavorites'])->name('user.favorites');
     Route::get('/user/orders', [UserController::class, 'getUserOrders'])->name('user.orders');
 });

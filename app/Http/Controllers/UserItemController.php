@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Item;
+use Illuminate\Support\Facades\Storage;
 
 class UserItemController extends Controller
 {
@@ -39,12 +40,26 @@ class UserItemController extends Controller
             $validated['image'] = $request->file('image')->store('annonces', 'public');
         }
         Item::create($validated);
-        return redirect()->route('dashboard')->with('success', 'Annonce publiée avec succès.');
+        return redirect()->route('user.annonces')->with('success', 'Annonce publiée avec succès.');
     }
 
     public function userAnnonces()
     {
         $items = Item::where('user_id', Auth::id())->orderBy('created_at', 'desc')->get();
         return view('user.annonces', compact('items'));
+    }
+
+    public function destroy($id)
+    {
+        $item = Item::where('user_id', Auth::id())->findOrFail($id);
+        
+        // Delete the image file if it exists
+        if ($item->image && Storage::exists('public/' . $item->image)) {
+            Storage::delete('public/' . $item->image);
+        }
+        
+        $item->delete();
+        
+        return redirect()->route('user.annonces')->with('success', 'Annonce supprimée avec succès.');
     }
 }
